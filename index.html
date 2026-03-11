@@ -181,6 +181,50 @@
   .login-spinner { display: none; width: 20px; height: 20px; border: 2.5px solid #ddd; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
   .login-spinner.show { display: block; }
   #main-page { display: none; }
+
+  /* ── OTP LOGIN ── */
+  #login-screen {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(135deg, #0f1c38 0%, #1a2744 60%, #0d2060 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .login-box {
+    background: white; border-radius: 20px; padding: 40px 44px;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .login-logo .ico { width: 44px; height: 44px; background: #1a2744; border-radius: 10px; display: grid; place-items: center; font-size: 22px; }
+  .login-logo h2 { font-size: 18px; font-weight: 700; color: #1a2744; }
+  .login-logo p  { font-size: 12px; color: #8899bb; }
+  .login-field label { display: block; font-size: 12px; font-weight: 600; color: #5a6a8a; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+  .login-field input {
+    width: 100%; border: 1.5px solid #dde3ee; border-radius: 9px;
+    padding: 11px 14px; font-size: 15px; font-family: inherit;
+    outline: none; transition: border-color .2s; color: #1a2744;
+  }
+  .login-field input:focus { border-color: #1a2744; }
+  .login-field input.otp-input {
+    font-size: 28px; font-weight: 700; letter-spacing: 10px;
+    text-align: center; color: #1a2744;
+  }
+  .btn-otp {
+    width: 100%; background: #1a2744; color: white; border: none;
+    padding: 13px; border-radius: 9px; font-size: 15px; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: background .2s, transform .1s;
+  }
+  .btn-otp:hover { background: #2e4070; transform: translateY(-1px); }
+  .btn-otp:disabled { background: #aab; cursor: not-allowed; transform: none; }
+  .login-status { font-size: 13px; padding: 10px 14px; border-radius: 8px; display: none; }
+  .login-status.error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
+  .login-status.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; display: block; }
+  .login-status.loading { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; display: block; }
+  .otp-step { display: none; flex-direction: column; gap: 16px; }
+  .otp-step.active { display: flex; }
+  .resend-link { font-size: 12px; color: #8899bb; text-align: center; cursor: pointer; }
+  .resend-link span { color: #1a2744; font-weight: 600; text-decoration: underline; cursor: pointer; }
+  .resend-link span:hover { color: #e8a020; }
 </style>
 </head>
 <body>
@@ -203,6 +247,47 @@
 
 <!-- ── MAIN PAGE ── -->
 <div id="main-page">
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="ico">👷</div>
+      <div>
+        <h2>ระบบข้อมูลพนักงาน</h2>
+        <p>Maintenance Department</p>
+      </div>
+    </div>
+
+    <!-- Step 1: Email -->
+    <div class="otp-step active" id="step-email">
+      <div class="login-field">
+        <label>อีเมล</label>
+        <input type="email" id="login-email" placeholder="กรอก Email ของคุณ"
+          onkeydown="if(event.key==='Enter') requestOTP()" />
+      </div>
+      <div class="login-status" id="email-status"></div>
+      <button class="btn-otp" id="btn-request" onclick="requestOTP()">📧 ขอรหัส OTP</button>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div class="otp-step" id="step-otp">
+      <div style="font-size:13px;color:#5a6a8a;line-height:1.6">
+        ส่งรหัส OTP ไปยัง <strong id="email-display" style="color:#1a2744"></strong> แล้ว<br>
+        รหัสมีอายุ <strong>5 นาที</strong>
+      </div>
+      <div class="login-field">
+        <label>รหัส OTP (6 หลัก)</label>
+        <input type="text" id="login-otp" class="otp-input" maxlength="6"
+          placeholder="000000" inputmode="numeric"
+          onkeydown="if(event.key==='Enter') verifyOTP()" />
+      </div>
+      <div class="login-status" id="otp-status"></div>
+      <button class="btn-otp" id="btn-verify" onclick="verifyOTP()">🔓 เข้าสู่ระบบ</button>
+      <div class="resend-link">ไม่ได้รับรหัส? <span onclick="backToEmail()">ขอใหม่</span></div>
+    </div>
+  </div>
+</div>
+
 <div class="top-bar">
   <div class="logo">👷</div>
   <div>
@@ -616,6 +701,106 @@ async function doLogin() {
 function setStatus(msg, type) {
   const b = document.getElementById('status-bar');
   b.innerHTML = msg; b.className = `status-bar visible ${type}`;
+}
+
+
+// ── OTP CONFIG ──
+// ใส่ Web App URL ของ Apps Script ที่นี่
+const API_URL = 'https://script.google.com/macros/s/AKfycbzj4CntLioqhK_Uo7ELtCniC_9wgXHUEoRXOOVVPnDDa68GDYaFMhRfSVCMZ4VJJpHsDw/exec'; // ← วาง Web App URL ตรงนี้
+
+let currentEmpId = null;
+
+async function requestOTP() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) { loginStatus('email-status', 'กรุณากรอก Email', 'error'); return; }
+
+  const btn = document.getElementById('btn-request');
+  btn.disabled = true;
+  loginStatus('email-status', '⏳ กำลังส่ง OTP...', 'loading');
+
+  try {
+    const url = `${API_URL}?action=requestOTP&email=${encodeURIComponent(email)}`;
+    const res  = await fetch(url, { redirect: 'follow' });
+    const json = await res.json();
+
+    if (json.status !== 'ok') {
+      loginStatus('email-status', json.message, 'error');
+      btn.disabled = false;
+      return;
+    }
+
+    // ไปขั้นตอน OTP
+    document.getElementById('email-display').textContent = email;
+    document.getElementById('step-email').classList.remove('active');
+    document.getElementById('step-otp').classList.add('active');
+    document.getElementById('login-otp').focus();
+    loginStatus('otp-status', '', '');
+
+  } catch (e) {
+    loginStatus('email-status', '❌ เชื่อมต่อไม่ได้ ตรวจสอบ API URL', 'error');
+    btn.disabled = false;
+  }
+}
+
+async function verifyOTP() {
+  const email = document.getElementById('login-email').value.trim();
+  const otp   = document.getElementById('login-otp').value.trim();
+
+  if (otp.length !== 6) { loginStatus('otp-status', 'กรุณากรอก OTP ให้ครบ 6 หลัก', 'error'); return; }
+
+  const btn = document.getElementById('btn-verify');
+  btn.disabled = true;
+  loginStatus('otp-status', '⏳ กำลังตรวจสอบ...', 'loading');
+
+  try {
+    const url  = `${API_URL}?action=verifyOTP&email=${encodeURIComponent(email)}&otp=${otp}`;
+    const res  = await fetch(url, { redirect: 'follow' });
+    const json = await res.json();
+
+    if (json.status !== 'ok') {
+      loginStatus('otp-status', json.message, 'error');
+      btn.disabled = false;
+      return;
+    }
+
+    // Login สำเร็จ
+    currentEmpId = json.empId;
+    document.getElementById('login-screen').style.display = 'none';
+    loginStatus('otp-status', '', '');
+
+    // โหลดข้อมูลอัตโนมัติและเลือกพนักงานที่ Login
+    await loadData();
+    autoSelectEmployee(currentEmpId);
+
+  } catch (e) {
+    loginStatus('otp-status', '❌ เชื่อมต่อไม่ได้', 'error');
+    btn.disabled = false;
+  }
+}
+
+function backToEmail() {
+  document.getElementById('step-otp').classList.remove('active');
+  document.getElementById('step-email').classList.add('active');
+  document.getElementById('btn-request').disabled = false;
+  document.getElementById('login-otp').value = '';
+  loginStatus('email-status', '', '');
+}
+
+function loginStatus(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `login-status${type ? ' ' + type : ''}`;
+}
+
+function autoSelectEmployee(empId) {
+  const sel = document.getElementById('emp-select');
+  for (let o of sel.options) {
+    if (o.textContent.startsWith(empId)) {
+      sel.value = o.value;
+      renderEmployee();
+      break;
+    }
+  }
 }
 
 // Init empty grids
