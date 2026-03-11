@@ -214,8 +214,9 @@
 </div>
 
 <script>
-// ── Sheet Config (GID ที่ถูกต้องของคุณ) ──
-const SHEET_ID = '1MAIt_2SPfogEiIa1wAMpEDhoepuzm8rvNapy6LNKFdQ';
+// ── Sheet Config ──
+// Published base URL (จาก Publish to web)
+const PUB_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpLtfM31k_zMu2oK-R_CnlIzxPeT68UWppRodZG_Ry4xFZIISVMys7MyR5Cyoswe_E7cal08M3Zjha/pub';
 const GID = {
   employees    : '1749939647',
   attendance   : '1200875504',
@@ -231,7 +232,7 @@ const LEVELS = ['','มือใหม่','พอใช้','ชำนาญ','
 let DB = {}, myChart = null;
 
 function csvUrl(gid) {
-  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
+  return `${PUB_BASE}?gid=${gid}&single=true&output=csv`;
 }
 
 function parseCSV(text) {
