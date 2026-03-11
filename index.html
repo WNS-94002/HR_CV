@@ -265,7 +265,7 @@ const GID = {
   achievements : '1989441662',
   trainings    : '1331065145',
   competencies : '551239597',
-  safety       : '1979151490'   // ← ใส่ GID ของ Sheet ความปลอดภัยที่นี่
+  safety       : '0'   // ← ใส่ GID ของ Sheet ความปลอดภัยที่นี่
 };
 
 const MECH   = ['งานเชื่อมโลหะ','งานสายพาน','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader','งานลูกกลิ้ง','งาน Oiler','งาน Component'];
@@ -342,8 +342,8 @@ function renderEmployee() {
   document.getElementById('f-empid').textContent    = id || '—';
   document.getElementById('f-name').textContent     = r[1] || '—';
   document.getElementById('f-position').textContent = r[2] || '—';
-  document.getElementById('f-age').textContent      = r[3] ? r[3] : '—';
-  document.getElementById('f-tenure').textContent   = r[4] ? r[4] : '—';
+  document.getElementById('f-age').textContent      = r[3] ? r[3]+' ปี' : '—';
+  document.getElementById('f-tenure').textContent   = r[4] ? r[4]+' ปี' : '—';
   document.getElementById('emp-id-badge').textContent = id || '—';
   doAttendance(id); doAchievements(id); doTrainings(id); doComp(id); doSafety(id);
 }
@@ -411,10 +411,11 @@ function doTrainings(id) {
 function doComp(id) {
   const row = DB.competencies.find(r => String(r[0]) === id);
   let offset = 1;
-  renderStars('mech-grid',    MECH,  row ? MECH.map((_,i)=>+(row[offset+i])||0) : []); offset += MECH.length;
-  renderStars('elec-grid',    ELEC,  row ? ELEC.map((_,i)=>+(row[offset+i])||0) : []); offset += ELEC.length;
-  renderStars('ops-grid',     OPS,   row ? OPS.map((_,i)=>+(row[offset+i])||0)  : []); offset += OPS.length;
-  renderStars('machine-grid', MACH,  row ? MACH.map((_,i)=>+(row[offset+i])||0) : []);
+  // ส่งค่าดิบเลย ไม่ coerce ด้วย ||0 เพื่อให้ renderStars แยกแยะ 0 กับ ว่างได้
+  renderStars('mech-grid',    MECH,  row ? MECH.map((_,i)=> row[offset+i]) : []); offset += MECH.length;
+  renderStars('elec-grid',    ELEC,  row ? ELEC.map((_,i)=> row[offset+i]) : []); offset += ELEC.length;
+  renderStars('ops-grid',     OPS,   row ? OPS.map((_,i)=>  row[offset+i]) : []); offset += OPS.length;
+  renderStars('machine-grid', MACH,  row ? MACH.map((_,i)=> row[offset+i]) : []);
 }
 
 function renderStars(gridId, skills, scores) {
