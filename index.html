@@ -208,6 +208,14 @@
         <div class="comp-section-title">⚡ งานซ่อมบำรุงไฟฟ้า</div>
         <div class="comp-grid" id="elec-grid"></div>
       </div>
+      <div class="comp-section">
+        <div class="comp-section-title">🏭 งานปฏิบัติการ</div>
+        <div class="comp-grid" id="ops-grid"></div>
+      </div>
+      <div class="comp-section">
+        <div class="comp-section-title">🚜 งานควบคุมเครื่องจักรระบบสายพาน</div>
+        <div class="comp-grid" id="machine-grid"></div>
+      </div>
     </div>
   </div>
 
@@ -227,6 +235,8 @@ const GID = {
 
 const MECH   = ['งานเชื่อมโลหะ','งานสายพาน','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader','งานลูกกลิ้ง','งาน Oiler','งาน Component'];
 const ELEC   = ['งานไฟฟ้าแรงสูง','งานไฟฟ้าอาคาร','งานซ่อม Conveyor','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader'];
+const OPS    = ['ควบคุม Conveyor','ควบคุม Crusher','ควบคุม Spreader','ควบคุม CCR','การทำความสะอาดเครื่องจักร'];
+const MACH   = ['Wheel Loader','Wheel Excavator','Skid Steer','Hydraulic Excavator'];
 const LEVELS = ['','มือใหม่','พอใช้','ชำนาญ','เชี่ยวชาญ','ผู้เชี่ยวชาญ'];
 
 let DB = {}, myChart = null;
@@ -364,8 +374,11 @@ function doTrainings(id) {
 
 function doComp(id) {
   const row = DB.competencies.find(r => String(r[0]) === id);
-  renderStars('mech-grid', MECH, row ? MECH.map((_,i)=>+(row[i+1])||0) : []);
-  renderStars('elec-grid', ELEC, row ? ELEC.map((_,i)=>+(row[i+1+MECH.length])||0) : []);
+  let offset = 1;
+  renderStars('mech-grid',    MECH,  row ? MECH.map((_,i)=>+(row[offset+i])||0) : []); offset += MECH.length;
+  renderStars('elec-grid',    ELEC,  row ? ELEC.map((_,i)=>+(row[offset+i])||0) : []); offset += ELEC.length;
+  renderStars('ops-grid',     OPS,   row ? OPS.map((_,i)=>+(row[offset+i])||0)  : []); offset += OPS.length;
+  renderStars('machine-grid', MACH,  row ? MACH.map((_,i)=>+(row[offset+i])||0) : []);
 }
 
 function renderStars(gridId, skills, scores) {
@@ -386,8 +399,10 @@ function setStatus(msg, type) {
 }
 
 // Init empty grids
-renderStars('mech-grid', MECH, []);
-renderStars('elec-grid', ELEC, []);
+renderStars('mech-grid',    MECH, []);
+renderStars('elec-grid',    ELEC, []);
+renderStars('ops-grid',     OPS,  []);
+renderStars('machine-grid', MACH, []);
 </script>
 </body>
 </html>
