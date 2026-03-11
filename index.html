@@ -4,422 +4,172 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ระบบข้อมูลพนักงาน</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --primary: #1a2744;
-    --accent: #e8a020;
-    --accent2: #3b82f6;
-    --surface: #f5f7fa;
-    --card: #ffffff;
-    --border: #dde3ee;
-    --text: #1a2744;
-    --text-secondary: #5a6a8a;
-    --danger: #dc2626;
-    --success: #059669;
-    --muted: #8899bb;
-    --shadow: 0 2px 12px rgba(26,39,68,0.08);
-    --radius: 12px;
+    --primary: #1a2744; --accent: #e8a020; --accent2: #3b82f6;
+    --surface: #f5f7fa; --card: #ffffff; --border: #dde3ee;
+    --text: #1a2744; --text-secondary: #5a6a8a;
+    --danger: #dc2626; --success: #059669; --muted: #8899bb;
+    --shadow: 0 2px 12px rgba(26,39,68,0.08); --radius: 12px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  body {
-    font-family: 'Sarabun', sans-serif;
-    background: var(--surface);
-    color: var(--text);
-    min-height: 100vh;
-  }
+  body { font-family: 'Sarabun', sans-serif; background: var(--surface); color: var(--text); min-height: 100vh; }
 
-  /* ── HEADER ── */
   .top-bar {
-    background: var(--primary);
-    color: white;
-    padding: 0 32px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    background: var(--primary); color: white; padding: 0 32px; height: 64px;
+    display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.18);
   }
-  .top-bar .logo {
-    width: 38px; height: 38px;
-    background: var(--accent);
-    border-radius: 8px;
-    display: grid; place-items: center;
-    font-weight: 700; font-size: 18px;
-  }
-  .top-bar h1 { font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
-  .top-bar .subtitle { font-size: 12px; color: #8fa3c8; margin-top: 1px; }
+  .top-bar .logo { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: grid; place-items: center; font-size: 18px; }
+  .top-bar h1 { font-size: 17px; font-weight: 600; }
   .top-bar .spacer { flex: 1; }
-  .top-bar .badge {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.15);
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: #b8cfee;
-  }
+  .top-bar .badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 5px 14px; border-radius: 20px; font-size: 12px; color: #b8cfee; }
 
-  /* ── CONFIG BANNER ── */
   #config-banner {
     background: linear-gradient(90deg, #1e3a6e, #1a2744);
     border-bottom: 2px solid var(--accent);
-    padding: 14px 32px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    padding: 14px 32px; display: flex; align-items: flex-start; gap: 12px; flex-direction: column;
   }
+  .config-row { display: flex; align-items: center; gap: 12px; width: 100%; flex-wrap: wrap; }
   #config-banner label { color: #8fa3c8; font-size: 13px; white-space: nowrap; }
   #config-banner input {
-    flex: 1; min-width: 220px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: white;
-    padding: 7px 14px;
-    border-radius: 7px;
-    font-size: 13px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s;
+    flex: 1; min-width: 300px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+    color: white; padding: 9px 14px; border-radius: 7px; font-size: 13px;
+    font-family: inherit; outline: none; transition: border-color 0.2s;
   }
   #config-banner input:focus { border-color: var(--accent); }
+  #config-banner input::placeholder { color: #4a6a9a; }
   .btn-load {
-    background: var(--accent);
-    color: #1a2744;
-    border: none;
-    padding: 8px 22px;
-    border-radius: 7px;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    white-space: nowrap;
+    background: var(--accent); color: #1a2744; border: none;
+    padding: 9px 24px; border-radius: 7px; font-size: 13px; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap;
   }
   .btn-load:hover { background: #f5b93a; transform: translateY(-1px); }
-  .btn-load:active { transform: translateY(0); }
 
-  /* ── LAYOUT ── */
-  .main-wrapper {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 28px 24px 48px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  .step-guide {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 10px 16px; width: 100%;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
   }
+  .step { display: flex; align-items: center; gap: 7px; }
+  .step-num { background: var(--accent); color: #1a2744; width: 21px; height: 21px; border-radius: 50%; font-size: 11px; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
+  .step span { color: #8fa3c8; font-size: 12px; }
+  .step strong { color: #c8d8f0; }
+  .arr { color: #3a5a8a; font-size: 13px; }
 
-  /* ── EMPLOYEE SELECTOR ── */
-  .emp-selector {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 16px 22px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    flex-wrap: wrap;
-  }
+  .main-wrapper { max-width: 1400px; margin: 0 auto; padding: 24px 24px 48px; display: flex; flex-direction: column; gap: 20px; }
+
+  .status-bar { display: none; padding: 12px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; align-items: center; gap: 10px; }
+  .status-bar.visible { display: flex; }
+  .status-bar.loading { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .status-bar.error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .status-bar.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 1s linear infinite; display: inline-block; }
+
+  .emp-selector { background: var(--card); border-radius: var(--radius); padding: 16px 22px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .emp-selector label { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
-  .emp-selector select {
-    flex: 1; min-width: 200px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-family: inherit;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
-    cursor: pointer;
-    background: white;
-    transition: border-color 0.2s;
-  }
+  .emp-selector select { flex: 1; min-width: 200px; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 14px; font-family: inherit; font-size: 14px; color: var(--text); outline: none; cursor: pointer; background: white; transition: border-color 0.2s; }
   .emp-selector select:focus { border-color: var(--accent2); }
-  .emp-selector .emp-id-badge {
-    background: var(--primary);
-    color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
+  .emp-id-badge { background: var(--primary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; }
 
-  /* ── CARDS ── */
-  .card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    overflow: hidden;
-  }
-  .card-header {
-    padding: 16px 22px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .card-header .icon {
-    width: 32px; height: 32px;
-    background: var(--primary);
-    border-radius: 8px;
-    display: grid; place-items: center;
-    color: var(--accent);
-    font-size: 15px;
-    flex-shrink: 0;
-  }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
+  .card-header { padding: 14px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .card-header .icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: grid; place-items: center; color: var(--accent); font-size: 15px; flex-shrink: 0; }
   .card-header h2 { font-size: 15px; font-weight: 600; color: var(--primary); }
   .card-body { padding: 20px 22px; }
 
-  /* ── PROFILE GRID ── */
-  .profile-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 16px;
-  }
-  .info-field label {
-    display: block;
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-  }
-  .info-field .value {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-  }
+  .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
+  .info-field label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .info-field .value { font-size: 15px; font-weight: 600; }
   .info-field .value.accent { color: var(--accent); }
 
-  /* ── ATTENDANCE TABLE ── */
-  .attendance-table-wrap { overflow-x: auto; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  table th {
-    background: var(--primary);
-    color: white;
-    padding: 9px 12px;
-    text-align: center;
-    font-weight: 500;
-    white-space: nowrap;
-    font-size: 12px;
-  }
-  table th:first-child { text-align: left; border-radius: 0; }
-  table td {
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-    color: var(--text);
-    white-space: nowrap;
-  }
+  .att-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th { background: var(--primary); color: white; padding: 9px 10px; text-align: center; font-weight: 500; white-space: nowrap; font-size: 12px; }
+  table th:first-child { text-align: left; }
+  table td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: center; white-space: nowrap; }
   table td:first-child { text-align: left; font-weight: 500; color: var(--primary); }
   table tr:nth-child(even) td { background: #f8fafc; }
   table tr:hover td { background: #eef3fb; }
-  .num-cell { font-variant-numeric: tabular-nums; font-weight: 500; }
   .zero { color: #ccc; }
 
-  /* ── CHART ── */
-  .chart-wrap {
-    position: relative;
-    height: 280px;
-    margin-top: 8px;
-  }
+  .chart-wrap { position: relative; height: 260px; margin-top: 16px; }
 
-  /* ── ACHIEVEMENTS / ISSUES ── */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
-  
   .list-panel { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
-  .list-panel .panel-head {
-    padding: 12px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex; align-items: center; gap: 8px;
-  }
+  .panel-head { padding: 12px 18px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
   .panel-head.good { background: #ecfdf5; color: var(--success); border-bottom: 1px solid #d1fae5; }
-  .panel-head.bad { background: #fef2f2; color: var(--danger); border-bottom: 1px solid #fee2e2; }
-  .list-items { padding: 12px 18px; }
-  .list-item {
-    padding: 7px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    color: var(--text);
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
+  .panel-head.bad  { background: #fef2f2; color: var(--danger);  border-bottom: 1px solid #fee2e2; }
+  .list-items { padding: 10px 18px; }
+  .list-item { padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
   .list-item:last-child { border-bottom: none; }
-  .list-item .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-  .dot.green { background: var(--success); }
-  .dot.red { background: var(--danger); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+  .dot.green { background: var(--success); } .dot.red { background: var(--danger); }
   .empty-state { color: var(--muted); font-size: 13px; padding: 8px 0; font-style: italic; }
 
-  /* ── TRAINING ── */
   .training-list { display: flex; flex-direction: column; gap: 8px; }
-  .training-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 14px;
-    background: var(--surface);
-    border-radius: 8px;
-    border-left: 3px solid var(--accent2);
-    font-size: 13px;
-  }
-  .training-item .date { color: var(--muted); font-size: 12px; min-width: 80px; }
-  .training-item .course { font-weight: 500; }
+  .training-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--surface); border-radius: 8px; border-left: 3px solid var(--accent2); font-size: 13px; flex-wrap: wrap; }
+  .t-date { color: var(--muted); font-size: 12px; min-width: 90px; }
+  .t-pass { color: var(--success); font-weight: 600; font-size: 12px; }
+  .t-fail { color: var(--danger);  font-weight: 600; font-size: 12px; }
 
-  /* ── COMPETENCY ── */
   .comp-section { margin-bottom: 20px; }
-  .comp-section-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--primary);
-    background: var(--surface);
-    border-left: 4px solid var(--accent);
-    padding: 8px 14px;
-    border-radius: 0 6px 6px 0;
-    margin-bottom: 12px;
-  }
-  .comp-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-  }
-  .comp-item {
-    background: var(--surface);
-    border-radius: 8px;
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-  }
-  .comp-item .comp-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
-  .comp-stars { display: flex; gap: 3px; }
-  .star { font-size: 16px; cursor: pointer; transition: transform 0.1s; user-select: none; }
-  .star:hover { transform: scale(1.2); }
-  .star.filled { color: var(--accent); }
-  .star.empty { color: #ddd; }
-  .comp-level-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .comp-section-title { font-size: 13px; font-weight: 600; color: var(--primary); background: var(--surface); border-left: 4px solid var(--accent); padding: 8px 14px; border-radius: 0 6px 6px 0; margin-bottom: 12px; }
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+  .comp-item { background: var(--surface); border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); }
+  .comp-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
+  .comp-stars { display: flex; gap: 2px; }
+  .star { font-size: 18px; color: #ddd; }
+  .star.on { color: var(--accent); }
+  .comp-level { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
-  /* ── LOADING / STATUS ── */
-  .status-bar {
-    text-align: center;
-    padding: 14px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    display: none;
-  }
-  .status-bar.visible { display: block; }
-  .status-bar.error { color: var(--danger); }
-  .status-bar.success { color: var(--success); }
-
-  /* ── INSTRUCTION BOX ── */
-  .instruction-box {
-    background: linear-gradient(135deg, #fffbf0, #fff8e8);
-    border: 1.5px solid #f5d080;
-    border-radius: var(--radius);
-    padding: 20px 24px;
-  }
-  .instruction-box h3 { color: #92600a; font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .instruction-box ol { padding-left: 20px; }
-  .instruction-box li { color: #7a5210; font-size: 13px; line-height: 1.8; }
-  .instruction-box code {
-    background: rgba(0,0,0,0.07);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-  }
-  .sheet-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--success);
-    color: white;
-    padding: 9px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    margin-top: 12px;
-    transition: background 0.2s, transform 0.1s;
-  }
-  .sheet-link:hover { background: #047857; transform: translateY(-1px); }
-
-  /* ── SECTION DIVIDER ── */
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
-  }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); display: flex; align-items: center; gap: 12px; }
   .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    .main-wrapper { padding: 16px 12px 32px; gap: 16px; }
-    .top-bar { padding: 0 16px; }
+    .main-wrapper { padding: 16px 12px 32px; }
     #config-banner { padding: 12px 16px; }
-    .card-body { padding: 14px 16px; }
   }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="top-bar">
   <div class="logo">👷</div>
   <div>
-    <div class="subtitle" style="color:#8fa3c8;font-size:11px;">MAINTENANCE DEPARTMENT</div>
+    <div style="color:#8fa3c8;font-size:11px;">MAINTENANCE DEPARTMENT</div>
     <h1>ระบบข้อมูลพนักงาน</h1>
   </div>
   <div class="spacer"></div>
-  <div class="badge" id="last-updated">— ยังไม่ได้โหลดข้อมูล</div>
+  <div class="badge" id="last-updated">ยังไม่ได้โหลดข้อมูล</div>
 </div>
 
-<!-- CONFIG BANNER -->
 <div id="config-banner">
-  <label>🔗 Google Sheet ID:</label>
-  <input type="text" id="sheet-id" placeholder="วางรหัส Spreadsheet ID ที่นี่  เช่น  1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" />
-  <button class="btn-load" onclick="loadData()">📥 โหลดข้อมูล</button>
+  <div class="config-row">
+    <label>🔗 Web App URL:</label>
+    <input type="text" id="api-url" placeholder="https://script.google.com/macros/s/xxxxxxxx/exec" />
+    <button class="btn-load" onclick="loadData()">📥 โหลดข้อมูล</button>
+  </div>
+  <div class="step-guide">
+    <div class="step"><div class="step-num">1</div><span>เปิด Sheet → <strong>Extensions → Apps Script</strong> → วางโค้ดจากไฟล์ <strong>apps_script_api.gs</strong></span></div>
+    <div class="arr">›</div>
+    <div class="step"><div class="step-num">2</div><span><strong>Deploy → New deployment → Web app</strong></span></div>
+    <div class="arr">›</div>
+    <div class="step"><div class="step-num">3</div><span>Execute as: <strong>Me</strong> | Access: <strong>Anyone</strong> → Deploy</span></div>
+    <div class="arr">›</div>
+    <div class="step"><div class="step-num">4</div><span>คัดลอก <strong>Web App URL</strong> วางในช่องด้านบน</span></div>
+  </div>
 </div>
 
 <div class="main-wrapper">
 
-  <!-- STATUS -->
   <div class="status-bar" id="status-bar"></div>
 
-  <!-- INSTRUCTION -->
-  <div class="instruction-box" id="instruction-box">
-    <h3>📋 วิธีใช้งาน</h3>
-    <ol>
-      <li>สร้าง Google Sheet ตามโครงสร้างด้านล่าง หรือ<strong> คัดลอก Template</strong> ที่เตรียมไว้</li>
-      <li>ใน Google Sheet ไปที่ <strong>File → Share → Publish to web</strong> เลือก <strong>Entire Document</strong> → <strong>CSV</strong> → <strong>Publish</strong></li>
-      <li>คัดลอก <strong>Spreadsheet ID</strong> จาก URL ของ Google Sheet <br><code>https://docs.google.com/spreadsheets/d/<strong>[นี่คือ ID]</strong>/edit</code></li>
-      <li>วาง ID ในช่องด้านบน แล้วคลิก <strong>โหลดข้อมูล</strong></li>
-    </ol>
-    <a href="https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms/copy" target="_blank" class="sheet-link">📄 เปิด Google Sheet Template</a>
-  </div>
-
-  <!-- EMPLOYEE SELECTOR -->
   <div class="emp-selector">
     <label>👤 เลือกพนักงาน:</label>
     <select id="emp-select" onchange="renderEmployee()">
@@ -428,13 +178,9 @@
     <div class="emp-id-badge" id="emp-id-badge">—</div>
   </div>
 
-  <!-- SECTION: ข้อมูลพื้นฐาน -->
   <div class="section-label">ข้อมูลพื้นฐาน</div>
   <div class="card">
-    <div class="card-header">
-      <div class="icon">🪪</div>
-      <h2>ข้อมูลพนักงาน</h2>
-    </div>
+    <div class="card-header"><div class="icon">🪪</div><h2>ข้อมูลพนักงาน</h2></div>
     <div class="card-body">
       <div class="profile-grid">
         <div class="info-field"><label>รหัสพนักงาน</label><div class="value accent" id="f-empid">—</div></div>
@@ -446,328 +192,205 @@
     </div>
   </div>
 
-  <!-- SECTION: สรุปวันทำงาน -->
   <div class="section-label">สรุปวันทำงานต่อเดือน</div>
   <div class="card">
-    <div class="card-header">
-      <div class="icon">📅</div>
-      <h2>สรุปการเข้าทำงานรายเดือน</h2>
-    </div>
+    <div class="card-header"><div class="icon">📅</div><h2>สรุปการเข้าทำงานรายเดือน</h2></div>
     <div class="card-body">
-      <div class="attendance-table-wrap">
-        <table id="att-table">
-          <thead>
-            <tr>
-              <th>เดือน</th>
-              <th>วันทำงาน</th>
-              <th>ชม.ทำงาน</th>
-              <th>ขาดงาน</th>
-              <th>ลาป่วย</th>
-              <th>ลากิจ</th>
-              <th>ลากิจพิเศษ</th>
-              <th>พักปีประจำ</th>
-              <th>Leave</th>
-              <th>Off</th>
-              <th>หยุดบริษัท</th>
-              <th>ลาคลอด</th>
-            </tr>
-          </thead>
+      <div class="att-wrap">
+        <table>
+          <thead><tr>
+            <th>เดือน</th><th>วันทำงาน</th><th>ชม.ทำงาน</th>
+            <th>ขาดงาน</th><th>ลาป่วย</th><th>ลากิจ</th><th>ลากิจพิเศษ</th>
+            <th>พักประจำปี</th><th>Leave</th><th>Off</th><th>หยุดบริษัท</th><th>ลาคลอด</th>
+          </tr></thead>
           <tbody id="att-body">
-            <tr><td colspan="12" class="empty-state" style="text-align:center;padding:20px;">ยังไม่มีข้อมูล</td></tr>
+            <tr><td colspan="12" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="chart-wrap">
-        <canvas id="att-chart"></canvas>
-      </div>
+      <div class="chart-wrap"><canvas id="att-chart"></canvas></div>
     </div>
   </div>
 
-  <!-- SECTION: งานเด่น / ปัญหา -->
   <div class="section-label">ผลงาน</div>
   <div class="two-col">
     <div class="list-panel">
       <div class="panel-head good">⭐ งานเด่นของพนักงาน</div>
-      <div class="list-items" id="highlights-list"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
+      <div class="list-items" id="hi-list"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
     </div>
     <div class="list-panel">
       <div class="panel-head bad">⚠️ งานที่มีปัญหา</div>
-      <div class="list-items" id="issues-list"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
+      <div class="list-items" id="is-list"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
     </div>
   </div>
 
-  <!-- SECTION: การอบรม -->
   <div class="section-label">การอบรม</div>
   <div class="card">
-    <div class="card-header">
-      <div class="icon">🎓</div>
-      <h2>ประวัติการอบรม</h2>
-    </div>
+    <div class="card-header"><div class="icon">🎓</div><h2>ประวัติการอบรม</h2></div>
     <div class="card-body">
-      <div class="training-list" id="training-list">
-        <div class="empty-state">ยังไม่มีข้อมูล</div>
-      </div>
+      <div class="training-list" id="train-list"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
     </div>
   </div>
 
-  <!-- SECTION: ความสามารถ -->
   <div class="section-label">ความสามารถ</div>
   <div class="card">
-    <div class="card-header">
-      <div class="icon">🔧</div>
-      <h2>ประเมินความสามารถ</h2>
-    </div>
+    <div class="card-header"><div class="icon">🔧</div><h2>ประเมินความสามารถ</h2></div>
     <div class="card-body">
-      
-      <!-- งานซ่อมบำรุงเครื่องกล -->
       <div class="comp-section">
         <div class="comp-section-title">⚙️ งานซ่อมบำรุงเครื่องกล</div>
-        <div class="comp-grid" id="mech-comp-grid">
-          <!-- filled by JS -->
-        </div>
+        <div class="comp-grid" id="mech-grid"></div>
       </div>
-
-      <!-- งานซ่อมบำรุงไฟฟ้า -->
       <div class="comp-section">
         <div class="comp-section-title">⚡ งานซ่อมบำรุงไฟฟ้า</div>
-        <div class="comp-grid" id="elec-comp-grid">
-          <!-- filled by JS -->
-        </div>
+        <div class="comp-grid" id="elec-grid"></div>
       </div>
     </div>
   </div>
 
-</div><!-- /main-wrapper -->
+</div>
 
 <script>
-// ── COMPETENCY DEFINITIONS ──
-const MECH_SKILLS = [
-  'งานเชื่อมโลหะ','งานสายพาน','งานซ่อม Crusher','งานซ่อม BWE',
-  'งานซ่อม Spreader','งานลูกกลิ้ง','งาน Oiler','งาน Component'
-];
-const ELEC_SKILLS = [
-  'งานไฟฟ้าแรงสูง','งานไฟฟ้าอาคาร','งานซ่อม Conveyor',
-  'งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader'
-];
-const LEVEL_LABELS = ['','มือใหม่','พอใช้','ชำนาญ','เชี่ยวชาญ','ผู้เชี่ยวชาญ'];
+const MECH   = ['งานเชื่อมโลหะ','งานสายพาน','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader','งานลูกกลิ้ง','งาน Oiler','งาน Component'];
+const ELEC   = ['งานไฟฟ้าแรงสูง','งานไฟฟ้าอาคาร','งานซ่อม Conveyor','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader'];
+const LEVELS = ['','มือใหม่','พอใช้','ชำนาญ','เชี่ยวชาญ','ผู้เชี่ยวชาญ'];
 
-let allData = { employees: [], attendance: [], achievements: [], trainings: [], competencies: [] };
-let attChart = null;
+let DB = {}, myChart = null;
 
-// ── RENDER COMPETENCY GRIDS ──
-function buildCompGrid(gridId, skills, prefix, values = {}) {
-  const grid = document.getElementById(gridId);
-  grid.innerHTML = '';
-  skills.forEach((skill, i) => {
-    const key = `${prefix}_${i}`;
-    const val = parseInt(values[key] || 0);
-    const item = document.createElement('div');
-    item.className = 'comp-item';
-    item.innerHTML = `
-      <div class="comp-name">${skill}</div>
-      <div class="comp-stars" data-key="${key}" data-grid="${gridId}">
-        ${[1,2,3,4,5].map(n => `<span class="star ${n <= val ? 'filled':'empty'}" data-val="${n}">★</span>`).join('')}
-      </div>
-      <div class="comp-level-label">${val ? LEVEL_LABELS[val] : 'ยังไม่ประเมิน'}</div>
-    `;
-    grid.appendChild(item);
-  });
-  // Star click (read-only display, just for show)
-}
-
-// ── LOAD DATA FROM GOOGLE SHEETS ──
 async function loadData() {
-  const id = document.getElementById('sheet-id').value.trim();
-  if (!id) { showStatus('กรุณากรอก Spreadsheet ID', 'error'); return; }
-  showStatus('⏳ กำลังโหลดข้อมูล...', '');
-
-  const TABS = {
-    employees: 1,
-    attendance: 2,
-    achievements: 3,
-    trainings: 4,
-    competencies: 5
-  };
-
-  try {
-    const results = await Promise.all(
-      Object.entries(TABS).map(([name, gid]) =>
-        fetchSheet(id, gid).then(rows => ({ name, rows })).catch(() => ({ name, rows: [] }))
-      )
-    );
-    results.forEach(r => { allData[r.name] = r.rows; });
-
-    // populate employee dropdown
-    const sel = document.getElementById('emp-select');
-    sel.innerHTML = '<option value="">— เลือกพนักงาน —</option>';
-    allData.employees.forEach((row, i) => {
-      if (!row[0] || row[0] === 'รหัสพนักงาน') return;
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = `${row[0]} – ${row[1] || ''}`;
-      sel.appendChild(opt);
-    });
-
-    showStatus(`✅ โหลดข้อมูลสำเร็จ (${allData.employees.length - 1} พนักงาน)`, 'success');
-    document.getElementById('last-updated').textContent = `อัพเดท: ${new Date().toLocaleTimeString('th-TH')}`;
-    document.getElementById('instruction-box').style.display = 'none';
-  } catch (e) {
-    showStatus('❌ ไม่สามารถโหลดข้อมูลได้ ตรวจสอบ Sheet ID และการตั้งค่า Publish to Web', 'error');
-  }
-}
-
-async function fetchSheet(id, gid) {
-  const url = `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error('fetch failed');
-  const text = await resp.text();
-  return parseCSV(text);
-}
-
-function parseCSV(text) {
-  return text.trim().split('\n').map(line => {
-    const res = []; let cur = ''; let inQ = false;
-    for (let c of line) {
-      if (c === '"') { inQ = !inQ; }
-      else if (c === ',' && !inQ) { res.push(cur.trim()); cur = ''; }
-      else { cur += c; }
-    }
-    res.push(cur.trim());
-    return res;
-  });
-}
-
-// ── RENDER SELECTED EMPLOYEE ──
-function renderEmployee() {
-  const idx = document.getElementById('emp-select').value;
-  if (idx === '') return;
-  const row = allData.employees[parseInt(idx)];
-  if (!row) return;
-
-  const empId = row[0] || '—';
-  document.getElementById('f-empid').textContent = empId;
-  document.getElementById('f-name').textContent = row[1] || '—';
-  document.getElementById('f-position').textContent = row[2] || '—';
-  document.getElementById('f-age').textContent = row[3] ? row[3] + ' ปี' : '—';
-  document.getElementById('f-tenure').textContent = row[4] ? row[4] + ' ปี' : '—';
-  document.getElementById('emp-id-badge').textContent = empId;
-
-  renderAttendance(empId);
-  renderAchievements(empId);
-  renderTrainings(empId);
-  renderCompetencies(empId);
-}
-
-// ── ATTENDANCE ──
-function renderAttendance(empId) {
-  const rows = allData.attendance.filter(r => r[0] === empId);
-  const tbody = document.getElementById('att-body');
-  tbody.innerHTML = '';
-
-  if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="12" class="empty-state" style="text-align:center;padding:20px;">ไม่มีข้อมูลการเข้าทำงาน</td></tr>';
-    if (attChart) { attChart.destroy(); attChart = null; }
+  const url = document.getElementById('api-url').value.trim();
+  if (!url) { status('กรุณากรอก Web App URL', 'error'); return; }
+  if (!url.includes('script.google.com')) {
+    status('URL ไม่ถูกต้อง — ต้องเป็น https://script.google.com/macros/s/.../exec', 'error');
     return;
   }
 
-  const months = [], workDays = [], absents = [], sickLeaves = [];
+  status('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
 
+  try {
+    const res  = await fetch(url, { redirect: 'follow' });
+    if (!res.ok) throw new Error(`HTTP ${res.status} — ตรวจสอบการ Deploy อีกครั้ง`);
+    const json = await res.json();
+    if (json.status !== 'ok') throw new Error(json.message || 'Apps Script ตอบกลับผิดพลาด');
+
+    DB = json.data;
+
+    const sel = document.getElementById('emp-select');
+    sel.innerHTML = '<option value="">— เลือกพนักงาน —</option>';
+    (DB.employees || []).forEach((r, i) => {
+      if (!r[0]) return;
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = `${r[0]}  –  ${r[1] || ''}`;
+      sel.appendChild(o);
+    });
+
+    status(`✅ โหลดสำเร็จ — พบพนักงาน ${(DB.employees||[]).length} คน`, 'success');
+    document.getElementById('last-updated').textContent = `อัพเดท ${new Date().toLocaleTimeString('th-TH')}`;
+
+  } catch (e) {
+    status(`❌ ${e.message}`, 'error');
+  }
+}
+
+function renderEmployee() {
+  const idx = document.getElementById('emp-select').value;
+  if (idx === '') return;
+  const r = DB.employees[+idx];
+  if (!r) return;
+  const id = String(r[0] || '');
+  document.getElementById('f-empid').textContent    = id || '—';
+  document.getElementById('f-name').textContent     = r[1] || '—';
+  document.getElementById('f-position').textContent = r[2] || '—';
+  document.getElementById('f-age').textContent      = r[3] ? r[3]+' ปี' : '—';
+  document.getElementById('f-tenure').textContent   = r[4] ? r[4]+' ปี' : '—';
+  document.getElementById('emp-id-badge').textContent = id || '—';
+  doAttendance(id); doAchievements(id); doTrainings(id); doComp(id);
+}
+
+function doAttendance(id) {
+  const rows = (DB.attendance||[]).filter(r => String(r[0])===id);
+  const tbody = document.getElementById('att-body');
+  tbody.innerHTML = '';
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:20px;color:var(--muted)">ไม่มีข้อมูล</td></tr>';
+    if (myChart) { myChart.destroy(); myChart = null; } return;
+  }
+  const months=[], work=[], absent=[], sick=[];
   rows.forEach(r => {
     const tr = document.createElement('tr');
-    tr.innerHTML = [r[1]||'',r[2]||0,r[3]||0,r[4]||0,r[5]||0,r[6]||0,r[7]||0,r[8]||0,r[9]||0,r[10]||0,r[11]||0,r[12]||0]
-      .map((v,i) => i===0 ? `<td>${v}</td>` : `<td class="num-cell ${v==0?'zero':''}">${v}</td>`)
-      .join('');
+    tr.innerHTML = `<td>${r[1]||''}</td>`+
+      [r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12]]
+        .map(v=>`<td class="${(+v||0)===0?'zero':''}">${v!=null&&v!==''?v:0}</td>`).join('');
     tbody.appendChild(tr);
     months.push(r[1]||'');
-    workDays.push(parseFloat(r[2])||0);
-    absents.push(parseFloat(r[4])||0);
-    sickLeaves.push(parseFloat(r[5])||0);
+    work.push(+(r[2])||0); absent.push(+(r[4])||0); sick.push(+(r[5])||0);
   });
-
-  drawChart(months, workDays, absents, sickLeaves);
-}
-
-function drawChart(months, workDays, absents, sickLeaves) {
-  const ctx = document.getElementById('att-chart').getContext('2d');
-  if (attChart) attChart.destroy();
-  attChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: months,
-      datasets: [
-        { label: 'วันทำงาน', data: workDays, backgroundColor: '#1a2744', borderRadius: 4 },
-        { label: 'ขาดงาน', data: absents, backgroundColor: '#dc2626', borderRadius: 4 },
-        { label: 'ลาป่วย', data: sickLeaves, backgroundColor: '#f59e0b', borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'top', labels: { font: { family: 'Sarabun', size: 12 }, padding: 16 } },
-        title: { display: true, text: 'กราฟสรุปการเข้าทำงานรายเดือน', font: { family: 'Sarabun', size: 14, weight: '600' }, color: '#1a2744', padding: { bottom: 12 } }
+  if (myChart) myChart.destroy();
+  myChart = new Chart(document.getElementById('att-chart'), {
+    type:'bar',
+    data:{ labels:months, datasets:[
+      {label:'วันทำงาน', data:work,   backgroundColor:'#1a2744', borderRadius:4},
+      {label:'ขาดงาน',   data:absent, backgroundColor:'#dc2626', borderRadius:4},
+      {label:'ลาป่วย',   data:sick,   backgroundColor:'#f59e0b', borderRadius:4},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top', labels:{font:{family:'Sarabun',size:12}}},
+        title:{display:true,text:'กราฟสรุปการเข้าทำงานรายเดือน',font:{family:'Sarabun',size:14,weight:'600'},color:'#1a2744'}
       },
-      scales: {
-        y: { beginAtZero: true, grid: { color: '#eee' }, ticks: { font: { family: 'Sarabun' } } },
-        x: { grid: { display: false }, ticks: { font: { family: 'Sarabun', size: 11 } } }
-      }
-    }
+      scales:{y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}},x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}}}}
   });
 }
 
-// ── ACHIEVEMENTS & ISSUES ──
-function renderAchievements(empId) {
-  const rows = allData.achievements.filter(r => r[0] === empId);
-  const hList = document.getElementById('highlights-list');
-  const iList = document.getElementById('issues-list');
-  const highlights = rows.filter(r => r[2] === 'เด่น');
-  const issues = rows.filter(r => r[2] === 'ปัญหา');
-
-  hList.innerHTML = highlights.length
-    ? highlights.map(r => `<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px;">${r[3]||''}</span></div></div>`).join('')
+function doAchievements(id) {
+  const rows = (DB.achievements||[]).filter(r=>String(r[0])===id);
+  const hi = rows.filter(r=>String(r[2]).includes('เด่น'));
+  const is = rows.filter(r=>String(r[2]).includes('ปัญหา'));
+  document.getElementById('hi-list').innerHTML = hi.length
+    ? hi.map(r=>`<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
     : '<div class="empty-state">ไม่มีข้อมูล</div>';
-
-  iList.innerHTML = issues.length
-    ? issues.map(r => `<div class="list-item"><div class="dot red"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px;">${r[3]||''}</span></div></div>`).join('')
+  document.getElementById('is-list').innerHTML = is.length
+    ? is.map(r=>`<div class="list-item"><div class="dot red"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
     : '<div class="empty-state">ไม่มีข้อมูล</div>';
 }
 
-// ── TRAININGS ──
-function renderTrainings(empId) {
-  const rows = allData.trainings.filter(r => r[0] === empId);
-  const list = document.getElementById('training-list');
-  list.innerHTML = rows.length
-    ? rows.map(r => `
-        <div class="training-item">
-          <div class="date">📅 ${r[2]||''}</div>
-          <div class="course">${r[1]||''}</div>
-          <div style="margin-left:auto;font-size:11px;color:var(--muted)">${r[3]||''}</div>
-        </div>`).join('')
+function doTrainings(id) {
+  const rows = (DB.trainings||[]).filter(r=>String(r[0])===id);
+  document.getElementById('train-list').innerHTML = rows.length
+    ? rows.map(r=>`<div class="training-item">
+        <div class="t-date">📅 ${r[2]||''}</div>
+        <div style="font-weight:500;flex:1">${r[1]||''}</div>
+        <div style="color:var(--muted);font-size:12px">${r[3]||''}</div>
+        <div class="${r[4]==='ผ่าน'?'t-pass':'t-fail'}">${r[4]||''}</div>
+      </div>`).join('')
     : '<div class="empty-state">ยังไม่มีประวัติการอบรม</div>';
 }
 
-// ── COMPETENCIES ──
-function renderCompetencies(empId) {
-  const row = allData.competencies.find(r => r[0] === empId);
-  // Mech: columns 1-8, Elec: columns 9-14
-  const mechVals = {}, elecVals = {};
-  if (row) {
-    MECH_SKILLS.forEach((_, i) => { mechVals[`mech_${i}`] = row[i+1] || 0; });
-    ELEC_SKILLS.forEach((_, i) => { elecVals[`elec_${i}`] = row[i+9] || 0; });
-  }
-  buildCompGrid('mech-comp-grid', MECH_SKILLS, 'mech', mechVals);
-  buildCompGrid('elec-comp-grid', ELEC_SKILLS, 'elec', elecVals);
+function doComp(id) {
+  const row = (DB.competencies||[]).find(r=>String(r[0])===id);
+  renderStars('mech-grid', MECH, row ? MECH.map((_,i)=>+(row[i+1])||0) : []);
+  renderStars('elec-grid', ELEC, row ? ELEC.map((_,i)=>+(row[i+1+MECH.length])||0) : []);
 }
 
-// ── UTILS ──
-function showStatus(msg, type) {
-  const bar = document.getElementById('status-bar');
-  bar.textContent = msg;
-  bar.className = `status-bar visible ${type}`;
+function renderStars(gridId, skills, scores) {
+  document.getElementById(gridId).innerHTML = skills.map((name,i)=>{
+    const v = scores[i]||0;
+    const stars = [1,2,3,4,5].map(n=>`<span class="star ${n<=v?'on':''}">\u2605</span>`).join('');
+    return `<div class="comp-item">
+      <div class="comp-name">${name}</div>
+      <div class="comp-stars">${stars}</div>
+      <div class="comp-level">${v?LEVELS[v]:'ยังไม่ประเมิน'}</div>
+    </div>`;
+  }).join('');
 }
 
-// ── INIT GRIDS ──
-buildCompGrid('mech-comp-grid', MECH_SKILLS, 'mech');
-buildCompGrid('elec-comp-grid', ELEC_SKILLS, 'elec');
+function status(msg, type) {
+  const b = document.getElementById('status-bar');
+  b.innerHTML = msg; b.className = `status-bar visible ${type}`;
+}
+
+renderStars('mech-grid', MECH, []);
+renderStars('elec-grid', ELEC, []);
 </script>
 </body>
 </html>
