@@ -103,7 +103,7 @@
   .comp-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
   .comp-stars { display: flex; gap: 2px; }
   .star { font-size: 18px; color: #ddd; }
-  .star.on { color: currentColor; }
+  .star.on { color: #e8a020; }
   .comp-level { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
   /* ระดับ 1 – มือใหม่: น้ำเงินอ่อน */
   .comp-item.lv1 { background: #dbeafe; border: 1.5px solid #93c5fd; opacity: 1; box-shadow: 0 2px 8px rgba(59,130,246,0.15); }
@@ -438,12 +438,15 @@ function doComp(id) {
 
 function renderStars(gridId, skills, scores) {
   document.getElementById(gridId).innerHTML = skills.map((name,i) => {
-    const v = scores[i]||0;
+    const raw = scores[i];
+    const v = (raw === '' || raw === null || raw === undefined) ? 0 : parseInt(raw, 10) || 0;
+    const assessed = v >= 1 && v <= 5;
+    const cls = assessed ? `comp-item lv${v}` : 'comp-item';
     const stars = [1,2,3,4,5].map(n=>`<span class="star ${n<=v?'on':''}">\u2605</span>`).join('');
-    return `<div class="comp-item">
+    return `<div class="${cls}">
       <div class="comp-name">${name}</div>
       <div class="comp-stars">${stars}</div>
-      <div class="comp-level">${v?LEVELS[v]:'ยังไม่ประเมิน'}</div>
+      <div class="comp-level">${assessed ? LEVELS[v] : 'ยังไม่ประเมิน'}</div>
     </div>`;
   }).join('');
 }
