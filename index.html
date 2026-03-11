@@ -8,285 +8,131 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --primary: #1a2744; --accent: #e8a020; --accent2: #3b82f6;
-    --surface: #f5f7fa; --card: #fff; --border: #dde3ee;
-    --text: #1a2744; --text-secondary: #5a6a8a;
-    --danger: #dc2626; --success: #059669; --muted: #8899bb;
-    --shadow: 0 2px 12px rgba(26,39,68,0.08); --radius: 12px;
+    --primary:#1a2744;--accent:#e8a020;--accent2:#3b82f6;
+    --surface:#f5f7fa;--card:#fff;--border:#dde3ee;
+    --text:#1a2744;--text-secondary:#5a6a8a;
+    --danger:#dc2626;--success:#059669;--muted:#8899bb;
+    --shadow:0 2px 12px rgba(26,39,68,0.08);--radius:12px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Sarabun', sans-serif; background: var(--surface); color: var(--text); }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sarabun',sans-serif;background:var(--surface);color:var(--text);}
 
-  .top-bar {
-    background: var(--primary); color: white; padding: 0 32px; height: 64px;
-    display: flex; align-items: center; gap: 16px;
-    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.18);
-  }
-  .logo { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: grid; place-items: center; font-size: 18px; }
-  .top-bar h1 { font-size: 17px; font-weight: 600; }
-  .spacer { flex: 1; }
-  .badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 5px 14px; border-radius: 20px; font-size: 12px; color: #b8cfee; }
+  .top-bar{background:var(--primary);color:white;padding:0 32px;height:64px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.18);}
+  .logo{width:38px;height:38px;background:var(--accent);border-radius:8px;display:grid;place-items:center;font-size:18px;}
+  .top-bar h1{font-size:17px;font-weight:600;}
+  .spacer{flex:1;}
+  .badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);padding:5px 14px;border-radius:20px;font-size:12px;color:#b8cfee;}
 
-  #config-banner {
-    background: linear-gradient(90deg,#1e3a6e,#1a2744);
-    border-bottom: 2px solid var(--accent);
-    padding: 14px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  }
-  #config-banner label { color: #8fa3c8; font-size: 13px; white-space: nowrap; }
-  .btn-load { background: var(--accent); color: #1a2744; border: none; padding: 9px 24px; border-radius: 7px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: .2s; }
-  .btn-load:hover { background: #f5b93a; transform: translateY(-1px); }
-  .sheet-info { color: #6a9ad0; font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 7px 14px; border-radius: 7px; font-family: monospace; }
+  #config-banner{background:linear-gradient(90deg,#1e3a6e,#1a2744);border-bottom:2px solid var(--accent);padding:14px 32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  #config-banner label{color:#8fa3c8;font-size:13px;white-space:nowrap;}
+  .sheet-info{color:#6a9ad0;font-size:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:7px 14px;border-radius:7px;font-family:monospace;}
+  .btn-load{background:var(--accent);color:#1a2744;border:none;padding:9px 24px;border-radius:7px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s;}
+  .btn-load:hover{background:#f5b93a;transform:translateY(-1px);}
 
-  .main-wrapper { max-width: 1400px; margin: 0 auto; padding: 24px 24px 48px; display: flex; flex-direction: column; gap: 20px; }
+  .main-wrapper{max-width:1400px;margin:0 auto;padding:24px 24px 48px;display:flex;flex-direction:column;gap:20px;}
 
-  .status-bar { display: none; padding: 12px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; align-items: center; gap: 10px; }
-  .status-bar.visible { display: flex; }
-  .status-bar.loading { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-  .status-bar.error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-  .status-bar.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spin { animation: spin 1s linear infinite; display: inline-block; }
+  .status-bar{display:none;padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;align-items:center;gap:10px;}
+  .status-bar.visible{display:flex;}
+  .status-bar.loading{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+  .status-bar.error{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;}
+  .status-bar.success{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .spin{animation:spin 1s linear infinite;display:inline-block;}
 
-  .emp-selector { background: var(--card); border-radius: var(--radius); padding: 16px 22px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .emp-selector label { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
-  .emp-selector select { flex: 1; min-width: 200px; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 14px; font-family: inherit; font-size: 14px; color: var(--text); outline: none; cursor: pointer; background: white; }
-  .emp-selector select:focus { border-color: var(--accent2); }
-  .emp-id-badge { background: var(--primary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .emp-selector{background:var(--card);border-radius:var(--radius);padding:16px 22px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .emp-selector label{font-size:14px;color:var(--text-secondary);font-weight:500;}
+  .emp-selector select{flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;font-family:inherit;font-size:14px;color:var(--text);outline:none;cursor:pointer;background:white;}
+  .emp-selector select:focus{border-color:var(--accent2);}
+  .emp-id-badge{background:var(--primary);color:white;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;}
 
-  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
-  .card-header { padding: 14px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-  .card-header .icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: grid; place-items: center; color: var(--accent); font-size: 15px; flex-shrink: 0; }
-  .card-header h2 { font-size: 15px; font-weight: 600; color: var(--primary); }
-  .card-body { padding: 20px 22px; }
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;}
+  .card-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .card-header .icon{width:32px;height:32px;background:var(--primary);border-radius:8px;display:grid;place-items:center;color:var(--accent);font-size:15px;flex-shrink:0;}
+  .card-header h2{font-size:15px;font-weight:600;color:var(--primary);}
+  .card-body{padding:20px 22px;}
 
-  .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px,1fr)); gap: 16px; }
-  .info-field label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
-  .info-field .value { font-size: 15px; font-weight: 600; }
-  .info-field .value.accent { color: var(--accent); }
+  .profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:16px;}
+  .info-field label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+  .info-field .value{font-size:15px;font-weight:600;}
+  .info-field .value.accent{color:var(--accent);}
 
-  .att-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  table th { background: var(--primary); color: white; padding: 9px 10px; text-align: center; font-weight: 500; white-space: nowrap; font-size: 12px; }
-  table th:first-child { text-align: left; }
-  table td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: center; white-space: nowrap; }
-  table td:first-child { text-align: left; font-weight: 500; color: var(--primary); }
-  table tr:nth-child(even) td { background: #f8fafc; }
-  table tr:hover td { background: #eef3fb; }
-  .zero { color: #ccc; }
+  .att-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  table th{background:var(--primary);color:white;padding:9px 10px;text-align:center;font-weight:500;white-space:nowrap;font-size:12px;}
+  table th:first-child{text-align:left;}
+  table td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap;}
+  table td:first-child{text-align:left;font-weight:500;color:var(--primary);}
+  table tr:nth-child(even) td{background:#f8fafc;}
+  table tr:hover td{background:#eef3fb;}
+  .zero{color:#ccc;}
+  .chart-wrap{position:relative;height:260px;margin-top:16px;}
 
-  .chart-wrap { position: relative; height: 260px; margin-top: 16px; }
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:700px){.two-col{grid-template-columns:1fr;}}
+  .list-panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;}
+  .panel-head{padding:12px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .panel-head.good{background:#ecfdf5;color:var(--success);border-bottom:1px solid #d1fae5;}
+  .panel-head.bad{background:#fef2f2;color:var(--danger);border-bottom:1px solid #fee2e2;}
+  .list-items{padding:10px 18px;}
+  .list-item{padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:flex-start;gap:8px;}
+  .list-item:last-child{border-bottom:none;}
+  .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+  .dot.green{background:var(--success);}.dot.red{background:var(--danger);}
+  .empty-state{color:var(--muted);font-size:13px;padding:8px 0;font-style:italic;}
 
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width:700px) { .two-col { grid-template-columns: 1fr; } }
-  .list-panel { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
-  .panel-head { padding: 12px 18px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-  .panel-head.good { background: #ecfdf5; color: var(--success); border-bottom: 1px solid #d1fae5; }
-  .panel-head.bad  { background: #fef2f2; color: var(--danger);  border-bottom: 1px solid #fee2e2; }
-  .list-items { padding: 10px 18px; }
-  .list-item { padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
-  .list-item:last-child { border-bottom: none; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-  .dot.green { background: var(--success); } .dot.red { background: var(--danger); }
-  .empty-state { color: var(--muted); font-size: 13px; padding: 8px 0; font-style: italic; }
+  .training-list{display:flex;flex-direction:column;gap:8px;}
+  .training-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border-radius:8px;border-left:3px solid var(--accent2);font-size:13px;flex-wrap:wrap;}
+  .t-date{color:var(--muted);font-size:12px;min-width:90px;}
+  .t-pass{color:var(--success);font-weight:600;font-size:12px;}
+  .t-fail{color:var(--danger);font-weight:600;font-size:12px;}
 
-  .training-list { display: flex; flex-direction: column; gap: 8px; }
-  .training-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--surface); border-radius: 8px; border-left: 3px solid var(--accent2); font-size: 13px; flex-wrap: wrap; }
-  .t-date { color: var(--muted); font-size: 12px; min-width: 90px; }
-  .t-pass { color: var(--success); font-weight: 600; font-size: 12px; }
-  .t-fail { color: var(--danger); font-weight: 600; font-size: 12px; }
-
-  .comp-section { margin-bottom: 20px; }
-  .comp-section-title { font-size: 13px; font-weight: 600; color: var(--primary); background: var(--surface); border-left: 4px solid var(--accent); padding: 8px 14px; border-radius: 0 6px 6px 0; margin-bottom: 12px; }
-  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px,1fr)); gap: 10px; }
+  /* ── COMPETENCY ── */
+  .comp-section{margin-bottom:20px;}
+  .comp-section-title{font-size:13px;font-weight:600;color:var(--primary);background:var(--surface);border-left:4px solid var(--accent);padding:8px 14px;border-radius:0 6px 6px 0;margin-bottom:12px;}
+  .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;}
   /* ยังไม่ประเมิน */
-  .comp-item { background: #f1f3f7; border-radius: 8px; padding: 10px 14px; border: 1px solid #e2e6ef; opacity: 0.5; transition: .2s; }
-  .comp-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
-  .comp-stars { display: flex; gap: 2px; }
-  .star { font-size: 18px; color: #ddd; }
-  .star.on { color: #e8a020; }
-  .comp-level { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
-  /* ระดับ 1 – มือใหม่: น้ำเงินอ่อน */
-  .comp-item.lv1 { background: #dbeafe; border: 1.5px solid #93c5fd; opacity: 1; box-shadow: 0 2px 8px rgba(59,130,246,0.15); }
-  .comp-item.lv1 .comp-name  { color: #1e40af; font-weight: 600; }
-  .comp-item.lv1 .comp-level { color: #2563eb; font-weight: 700; font-size: 12px; }
-  /* ระดับ 2 – พอใช้: ม่วง */
-  .comp-item.lv2 { background: #ede9fe; border: 1.5px solid #c4b5fd; opacity: 1; box-shadow: 0 2px 8px rgba(139,92,246,0.15); }
-  .comp-item.lv2 .comp-name  { color: #4c1d95; font-weight: 600; }
-  .comp-item.lv2 .comp-level { color: #7c3aed; font-weight: 700; font-size: 12px; }
-  /* ระดับ 3 – ชำนาญ: เหลืองทอง */
-  .comp-item.lv3 { background: #fef3c7; border: 1.5px solid #fcd34d; opacity: 1; box-shadow: 0 2px 8px rgba(245,158,11,0.15); }
-  .comp-item.lv3 .comp-name  { color: #92400e; font-weight: 600; }
-  .comp-item.lv3 .comp-level { color: #d97706; font-weight: 700; font-size: 12px; }
-  /* ระดับ 4 – เชี่ยวชาญ: ส้ม */
-  .comp-item.lv4 { background: #fed7aa; border: 1.5px solid #fb923c; opacity: 1; box-shadow: 0 2px 8px rgba(234,88,12,0.15); }
-  .comp-item.lv4 .comp-name  { color: #7c2d12; font-weight: 600; }
-  .comp-item.lv4 .comp-level { color: #ea580c; font-weight: 700; font-size: 12px; }
-  /* ระดับ 5 – ผู้เชี่ยวชาญ: เขียว */
-  .comp-item.lv5 { background: #bbf7d0; border: 1.5px solid #4ade80; opacity: 1; box-shadow: 0 2px 8px rgba(22,163,74,0.18); }
-  .comp-item.lv5 .comp-name  { color: #14532d; font-weight: 600; }
-  .comp-item.lv5 .comp-level { color: #16a34a; font-weight: 700; font-size: 12px; }
-  /* Safety */
-  .safety-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px,1fr)); gap: 12px; }
-  .safety-item { background: var(--card); border-radius: 10px; border: 1px solid var(--border); padding: 16px 18px; display: flex; flex-direction: column; gap: 5px; box-shadow: var(--shadow); }
-  .safety-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; line-height: 1.4; }
-  .safety-value { font-size: 26px; font-weight: 700; color: var(--primary); }
-  .safety-value.ok      { color: var(--success); }
-  .safety-value.warn    { color: #d97706; }
-  .safety-value.danger  { color: var(--danger); }
-  .safety-unit { font-size: 11px; color: var(--muted); }
+  .comp-item{background:#f1f3f7;border-radius:8px;padding:10px 14px;border:1px solid #e2e6ef;opacity:0.5;transition:.2s;}
+  .comp-name{font-size:12px;color:var(--text-secondary);margin-bottom:5px;font-weight:500;}
+  .comp-stars{display:flex;gap:2px;}
+  .star{font-size:18px;color:#ddd;}
+  .star.on{color:#e8a020;}
+  .comp-level{font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;}
+  /* ระดับ 1 */
+  .comp-item.lv1{background:#dbeafe;border:1.5px solid #93c5fd;opacity:1;box-shadow:0 2px 8px rgba(59,130,246,0.15);}
+  .comp-item.lv1 .comp-name{color:#1e40af;font-weight:600;}
+  .comp-item.lv1 .comp-level{color:#2563eb;font-weight:700;font-size:12px;}
+  /* ระดับ 2 */
+  .comp-item.lv2{background:#ede9fe;border:1.5px solid #c4b5fd;opacity:1;box-shadow:0 2px 8px rgba(139,92,246,0.15);}
+  .comp-item.lv2 .comp-name{color:#4c1d95;font-weight:600;}
+  .comp-item.lv2 .comp-level{color:#7c3aed;font-weight:700;font-size:12px;}
+  /* ระดับ 3 */
+  .comp-item.lv3{background:#fef3c7;border:1.5px solid #fcd34d;opacity:1;box-shadow:0 2px 8px rgba(245,158,11,0.15);}
+  .comp-item.lv3 .comp-name{color:#92400e;font-weight:600;}
+  .comp-item.lv3 .comp-level{color:#d97706;font-weight:700;font-size:12px;}
+  /* ระดับ 4 */
+  .comp-item.lv4{background:#fed7aa;border:1.5px solid #fb923c;opacity:1;box-shadow:0 2px 8px rgba(234,88,12,0.15);}
+  .comp-item.lv4 .comp-name{color:#7c2d12;font-weight:600;}
+  .comp-item.lv4 .comp-level{color:#ea580c;font-weight:700;font-size:12px;}
+  /* ระดับ 5 */
+  .comp-item.lv5{background:#bbf7d0;border:1.5px solid #4ade80;opacity:1;box-shadow:0 2px 8px rgba(22,163,74,0.18);}
+  .comp-item.lv5 .comp-name{color:#14532d;font-weight:600;}
+  .comp-item.lv5 .comp-level{color:#16a34a;font-weight:700;font-size:12px;}
 
-  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); display: flex; align-items: center; gap: 12px; }
-  .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+  /* ── SAFETY ── */
+  .safety-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;}
+  .safety-item{background:var(--card);border-radius:10px;border:1px solid var(--border);padding:16px 18px;display:flex;flex-direction:column;gap:5px;box-shadow:var(--shadow);}
+  .safety-label{font-size:12px;color:var(--text-secondary);font-weight:500;line-height:1.4;}
+  .safety-value{font-size:26px;font-weight:700;color:var(--primary);}
+  .safety-value.ok{color:var(--success);}
+  .safety-value.warn{color:#d97706;}
+  .safety-value.danger{color:var(--danger);}
+  .safety-unit{font-size:11px;color:var(--muted);}
 
-  /* ── LOGIN PAGE ── */
-  #login-page {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, #0f1c36 0%, #1a2744 60%, #1e3a6e 100%);
-    padding: 24px;
-  }
-  .login-box {
-    background: white; border-radius: 20px; padding: 44px 40px;
-    width: 100%; max-width: 420px;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
-    display: flex; flex-direction: column; align-items: center; gap: 0;
-  }
-  .login-logo {
-    width: 64px; height: 64px; background: var(--primary); border-radius: 16px;
-    display: grid; place-items: center; font-size: 30px; margin-bottom: 20px;
-    box-shadow: 0 8px 24px rgba(26,39,68,0.25);
-  }
-  .login-title { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-  .login-sub   { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
-  .login-label { align-self: flex-start; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; width: 100%; }
-  .login-input {
-    width: 100%; padding: 12px 16px; border: 1.5px solid var(--border);
-    border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--text);
-    outline: none; transition: border-color .2s, box-shadow .2s; margin-bottom: 20px;
-  }
-  .login-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
-  .login-btn {
-    width: 100%; padding: 13px; background: var(--primary); color: white;
-    border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
-    font-family: inherit; cursor: pointer; transition: background .2s, transform .1s;
-    margin-bottom: 12px;
-  }
-  .login-btn:hover { background: #243660; transform: translateY(-1px); }
-  .login-btn:active { transform: translateY(0); }
-  .login-error {
-    width: 100%; background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;
-    border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 500;
-    display: none; margin-bottom: 8px; text-align: center;
-  }
-  .login-error.show { display: block; }
-  .login-spinner { display: none; width: 20px; height: 20px; border: 2.5px solid #ddd; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-  .login-spinner.show { display: block; }
-  #main-page { display: none; }
-
-  /* ── OTP LOGIN ── */
-  #login-screen {
-    position: fixed; inset: 0; z-index: 999;
-    background: linear-gradient(135deg, #0f1c38 0%, #1a2744 60%, #0d2060 100%);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .login-box {
-    background: white; border-radius: 20px; padding: 40px 44px;
-    width: 100%; max-width: 420px;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
-    display: flex; flex-direction: column; gap: 20px;
-  }
-  .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
-  .login-logo .ico { width: 44px; height: 44px; background: #1a2744; border-radius: 10px; display: grid; place-items: center; font-size: 22px; }
-  .login-logo h2 { font-size: 18px; font-weight: 700; color: #1a2744; }
-  .login-logo p  { font-size: 12px; color: #8899bb; }
-  .login-field label { display: block; font-size: 12px; font-weight: 600; color: #5a6a8a; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
-  .login-field input {
-    width: 100%; border: 1.5px solid #dde3ee; border-radius: 9px;
-    padding: 11px 14px; font-size: 15px; font-family: inherit;
-    outline: none; transition: border-color .2s; color: #1a2744;
-  }
-  .login-field input:focus { border-color: #1a2744; }
-  .login-field input.otp-input {
-    font-size: 28px; font-weight: 700; letter-spacing: 10px;
-    text-align: center; color: #1a2744;
-  }
-  .btn-otp {
-    width: 100%; background: #1a2744; color: white; border: none;
-    padding: 13px; border-radius: 9px; font-size: 15px; font-weight: 700;
-    font-family: inherit; cursor: pointer; transition: background .2s, transform .1s;
-  }
-  .btn-otp:hover { background: #2e4070; transform: translateY(-1px); }
-  .btn-otp:disabled { background: #aab; cursor: not-allowed; transform: none; }
-  .login-status { font-size: 13px; padding: 10px 14px; border-radius: 8px; display: none; }
-  .login-status.error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
-  .login-status.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; display: block; }
-  .login-status.loading { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; display: block; }
-  .otp-step { display: none; flex-direction: column; gap: 16px; }
-  .otp-step.active { display: flex; }
-  .resend-link { font-size: 12px; color: #8899bb; text-align: center; cursor: pointer; }
-  .resend-link span { color: #1a2744; font-weight: 600; text-decoration: underline; cursor: pointer; }
-  .resend-link span:hover { color: #e8a020; }
+  .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:12px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
 </style>
 </head>
 <body>
-
-<!-- ── LOGIN PAGE ── -->
-<div id="login-page">
-  <div class="login-box">
-    <div class="login-logo">👷</div>
-    <div class="login-title">ระบบข้อมูลพนักงาน</div>
-    <div class="login-sub">Maintenance Department</div>
-    <div class="login-label">📧 อีเมลของคุณ</div>
-    <input class="login-input" type="email" id="login-email"
-      placeholder="example@company.com"
-      onkeydown="if(event.key==='Enter') doLogin()" />
-    <div class="login-spinner" id="login-spinner"></div>
-    <div class="login-error" id="login-error"></div>
-    <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-  </div>
-</div>
-
-<!-- ── MAIN PAGE ── -->
-<div id="main-page">
-
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="ico">👷</div>
-      <div>
-        <h2>ระบบข้อมูลพนักงาน</h2>
-        <p>Maintenance Department</p>
-      </div>
-    </div>
-
-    <!-- Step 1: Email -->
-    <div class="otp-step active" id="step-email">
-      <div class="login-field">
-        <label>อีเมล</label>
-        <input type="email" id="login-email" placeholder="กรอก Email ของคุณ"
-          onkeydown="if(event.key==='Enter') requestOTP()" />
-      </div>
-      <div class="login-status" id="email-status"></div>
-      <button class="btn-otp" id="btn-request" onclick="requestOTP()">📧 ขอรหัส OTP</button>
-    </div>
-
-    <!-- Step 2: OTP -->
-    <div class="otp-step" id="step-otp">
-      <div style="font-size:13px;color:#5a6a8a;line-height:1.6">
-        ส่งรหัส OTP ไปยัง <strong id="email-display" style="color:#1a2744"></strong> แล้ว<br>
-        รหัสมีอายุ <strong>5 นาที</strong>
-      </div>
-      <div class="login-field">
-        <label>รหัส OTP (6 หลัก)</label>
-        <input type="text" id="login-otp" class="otp-input" maxlength="6"
-          placeholder="000000" inputmode="numeric"
-          onkeydown="if(event.key==='Enter') verifyOTP()" />
-      </div>
-      <div class="login-status" id="otp-status"></div>
-      <button class="btn-otp" id="btn-verify" onclick="verifyOTP()">🔓 เข้าสู่ระบบ</button>
-      <div class="resend-link">ไม่ได้รับรหัส? <span onclick="backToEmail()">ขอใหม่</span></div>
-    </div>
-  </div>
-</div>
 
 <div class="top-bar">
   <div class="logo">👷</div>
@@ -298,9 +144,10 @@
   <div class="badge" id="last-updated">ยังไม่ได้โหลดข้อมูล</div>
 </div>
 
-<div id="config-banner" style="display:none">
+<div id="config-banner">
   <label>📋 Google Sheet:</label>
   <div class="sheet-info">ID: 1MAIt_2SPfogEiIa1wAMpEDhoepuzm8rvNapy6LNKFdQ</div>
+  <button class="btn-load" onclick="loadData()">📥 โหลดข้อมูล</button>
 </div>
 
 <div class="main-wrapper">
@@ -402,21 +249,9 @@
     </div>
   </div>
 
-  <div class="section-label">ความปลอดภัย</div>
-  <div class="card">
-    <div class="card-header"><div class="icon">🦺</div><h2>สรุปความปลอดภัย</h2></div>
-    <div class="card-body">
-      <div class="safety-grid" id="safety-grid">
-        <div class="empty-state">ยังไม่มีข้อมูล</div>
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <script>
-// ── Sheet Config ──
-// Published base URL (จาก Publish to web)
 const PUB_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpLtfM31k_zMu2oK-R_CnlIzxPeT68UWppRodZG_Ry4xFZIISVMys7MyR5Cyoswe_E7cal08M3Zjha/pub';
 const GID = {
   employees    : '1749939647',
@@ -455,14 +290,12 @@ function parseCSV(text) {
 async function fetchSheet(gid) {
   const res = await fetch(csvUrl(gid), { credentials: 'omit' });
   if (!res.ok) throw new Error(`HTTP ${res.status} (gid=${gid})`);
-  const text = await res.text();
-  const rows = parseCSV(text);
+  const rows = parseCSV(await res.text());
   return rows.slice(1).filter(r => r[0] && r[0] !== '');
 }
 
 async function loadData() {
   setStatus('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
-
   try {
     const [employees, attendance, achievements, trainings, competencies] = await Promise.all([
       fetchSheet(GID.employees),
@@ -471,10 +304,7 @@ async function loadData() {
       fetchSheet(GID.trainings),
       fetchSheet(GID.competencies),
     ]);
-
-    // โหลด safety เฉพาะเมื่อกำหนด GID แล้ว
-    const safety = GID.safety ? await fetchSheet(GID.safety).catch(()=>[]) : [];
-
+    const safety = GID.safety ? await fetchSheet(GID.safety).catch(() => []) : [];
     DB = { employees, attendance, achievements, trainings, competencies, safety };
 
     const sel = document.getElementById('emp-select');
@@ -485,12 +315,10 @@ async function loadData() {
       o.textContent = `${r[0]}  –  ${r[1] || ''}`;
       sel.appendChild(o);
     });
-
     setStatus(`✅ โหลดสำเร็จ — พบพนักงาน ${employees.length} คน`, 'success');
     document.getElementById('last-updated').textContent = `อัพเดท ${new Date().toLocaleTimeString('th-TH')}`;
-
   } catch (e) {
-    setStatus(`❌ โหลดไม่สำเร็จ: ${e.message}<br><small>ตรวจสอบ: File → Share → Publish to web → Entire Document → CSV → Publish</small>`, 'error');
+    setStatus(`❌ โหลดไม่สำเร็จ: ${e.message}`, 'error');
   }
 }
 
@@ -506,7 +334,7 @@ function renderEmployee() {
   document.getElementById('f-age').textContent      = r[3] || '—';
   document.getElementById('f-tenure').textContent   = r[4] || '—';
   document.getElementById('emp-id-badge').textContent = id || '—';
-  doAttendance(id); doAchievements(id); doTrainings(id); doComp(id); doSafety(id);
+  doAttendance(id); doSafety(id); doAchievements(id); doTrainings(id); doComp(id);
 }
 
 function doAttendance(id) {
@@ -518,7 +346,7 @@ function doAttendance(id) {
     if (myChart) { myChart.destroy(); myChart = null; }
     return;
   }
-  const months=[], work=[], absent=[], sick=[];
+  const months = [], work = [], absent = [], sick = [];
   rows.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${r[1]||''}</td>` +
@@ -538,11 +366,35 @@ function doAttendance(id) {
     options: { responsive:true, maintainAspectRatio:false,
       plugins: {
         legend: { position:'top', labels:{ font:{family:'Sarabun',size:12} } },
-        title: { display:true, text:'กราฟสรุปการเข้าทำงานรายเดือน', font:{family:'Sarabun',size:14,weight:'600'}, color:'#1a2744' }
+        title:  { display:true, text:'กราฟสรุปการเข้าทำงานรายเดือน', font:{family:'Sarabun',size:14,weight:'600'}, color:'#1a2744' }
       },
-      scales: { y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}}, x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}} }
+      scales: { y:{ beginAtZero:true, ticks:{font:{family:'Sarabun'}} }, x:{ grid:{display:false}, ticks:{font:{family:'Sarabun',size:11}} } }
     }
   });
+}
+
+function doSafety(id) {
+  const row = (DB.safety||[]).find(r => String(r[0]) === id);
+  const grid = document.getElementById('safety-grid');
+  if (!row) { grid.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลความปลอดภัย</div>'; return; }
+  const fields = [
+    { label:'🗣️ Safety Talk',            val:row[1], unit:'ครั้ง/เดือน', danger:false },
+    { label:'👥 Small Group Talk',        val:row[2], unit:'ครั้ง/เดือน', danger:false },
+    { label:'📋 BBSO',                    val:row[3], unit:'ครั้ง/เดือน', danger:false },
+    { label:'🩹 การบาดเจ็บจากการทำงาน', val:row[4], unit:'ครั้ง',        danger:true  },
+    { label:'⚠️ การเกิดอุบัติเหตุ',      val:row[5], unit:'ครั้ง',        danger:true  },
+  ];
+  grid.innerHTML = fields.map(f => {
+    const v = (f.val != null && f.val !== '') ? f.val : '—';
+    const num = parseFloat(v);
+    let cls = '';
+    if (!isNaN(num)) cls = f.danger ? (num === 0 ? 'ok' : 'danger') : (num === 0 ? 'warn' : 'ok');
+    return `<div class="safety-item">
+      <div class="safety-label">${f.label}</div>
+      <div class="safety-value ${cls}">${v}</div>
+      <div class="safety-unit">${f.unit}</div>
+    </div>`;
+  }).join('');
 }
 
 function doAchievements(id) {
@@ -550,17 +402,17 @@ function doAchievements(id) {
   const hi = rows.filter(r => String(r[2]).includes('เด่น'));
   const is = rows.filter(r => String(r[2]).includes('ปัญหา'));
   document.getElementById('hi-list').innerHTML = hi.length
-    ? hi.map(r=>`<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
+    ? hi.map(r => `<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
     : '<div class="empty-state">ไม่มีข้อมูล</div>';
   document.getElementById('is-list').innerHTML = is.length
-    ? is.map(r=>`<div class="list-item"><div class="dot red"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
+    ? is.map(r => `<div class="list-item"><div class="dot red"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
     : '<div class="empty-state">ไม่มีข้อมูล</div>';
 }
 
 function doTrainings(id) {
   const rows = DB.trainings.filter(r => String(r[0]) === id);
   document.getElementById('train-list').innerHTML = rows.length
-    ? rows.map(r=>`<div class="training-item">
+    ? rows.map(r => `<div class="training-item">
         <div class="t-date">📅 ${r[2]||''}</div>
         <div style="font-weight:500;flex:1">${r[1]||''}</div>
         <div style="color:var(--muted);font-size:12px">${r[3]||''}</div>
@@ -572,20 +424,19 @@ function doTrainings(id) {
 function doComp(id) {
   const row = DB.competencies.find(r => String(r[0]) === id);
   let offset = 1;
-  // ส่งค่าดิบเลย ไม่ coerce ด้วย ||0 เพื่อให้ renderStars แยกแยะ 0 กับ ว่างได้
-  renderStars('mech-grid',    MECH,  row ? MECH.map((_,i)=> row[offset+i]) : []); offset += MECH.length;
-  renderStars('elec-grid',    ELEC,  row ? ELEC.map((_,i)=> row[offset+i]) : []); offset += ELEC.length;
-  renderStars('ops-grid',     OPS,   row ? OPS.map((_,i)=>  row[offset+i]) : []); offset += OPS.length;
-  renderStars('machine-grid', MACH,  row ? MACH.map((_,i)=> row[offset+i]) : []);
+  renderStars('mech-grid',    MECH, row ? MECH.map((_,i) => row[offset+i]) : []); offset += MECH.length;
+  renderStars('elec-grid',    ELEC, row ? ELEC.map((_,i) => row[offset+i]) : []); offset += ELEC.length;
+  renderStars('ops-grid',     OPS,  row ? OPS.map((_,i)  => row[offset+i]) : []); offset += OPS.length;
+  renderStars('machine-grid', MACH, row ? MACH.map((_,i) => row[offset+i]) : []);
 }
 
 function renderStars(gridId, skills, scores) {
-  document.getElementById(gridId).innerHTML = skills.map((name,i) => {
+  document.getElementById(gridId).innerHTML = skills.map((name, i) => {
     const raw = scores[i];
     const v = (raw === '' || raw === null || raw === undefined) ? 0 : parseInt(raw, 10) || 0;
     const assessed = v >= 1 && v <= 5;
     const cls = assessed ? `comp-item lv${v}` : 'comp-item';
-    const stars = [1,2,3,4,5].map(n=>`<span class="star ${n<=v?'on':''}">\u2605</span>`).join('');
+    const stars = [1,2,3,4,5].map(n => `<span class="star ${n<=v?'on':''}">\u2605</span>`).join('');
     return `<div class="${cls}">
       <div class="comp-name">${name}</div>
       <div class="comp-stars">${stars}</div>
@@ -594,221 +445,16 @@ function renderStars(gridId, skills, scores) {
   }).join('');
 }
 
-function doSafety(id) {
-  const row = (DB.safety||[]).find(r => String(r[0]) === id);
-  const grid = document.getElementById('safety-grid');
-  if (!row) { grid.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลความปลอดภัย</div>'; return; }
-
-  const fields = [
-    { label: '🗣️ Safety Talk', val: row[1], unit: 'ครั้ง/เดือน', warn: 0 },
-    { label: '👥 Small Group Talk', val: row[2], unit: 'ครั้ง/เดือน', warn: 0 },
-    { label: '📋 BBSO', val: row[3], unit: 'ครั้ง/เดือน', warn: 0 },
-    { label: '🩹 การบาดเจ็บจากการทำงาน', val: row[4], unit: 'ครั้ง', danger: true },
-    { label: '⚠️ การเกิดอุบัติเหตุ', val: row[5], unit: 'ครั้ง', danger: true },
-  ];
-
-  grid.innerHTML = fields.map(f => {
-    const v = f.val != null && f.val !== '' ? f.val : '—';
-    const num = parseFloat(v);
-    let cls = '';
-    if (!isNaN(num)) {
-      if (f.danger) cls = num === 0 ? 'ok' : 'danger';
-      else cls = num === 0 ? 'warn' : 'ok';
-    }
-    return `<div class="safety-item">
-      <div class="safety-label">${f.label}</div>
-      <div class="safety-value ${cls}">${v}</div>
-      <div class="safety-unit">${f.unit}</div>
-    </div>`;
-  }).join('');
-}
-
-// ── LOGIN ──
-async function doLogin() {
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const errEl = document.getElementById('login-error');
-  const spin  = document.getElementById('login-spinner');
-  errEl.className = 'login-error';
-
-  if (!email) {
-    errEl.textContent = 'กรุณากรอกอีเมล';
-    errEl.className = 'login-error show'; return;
-  }
-  if (!email.includes('@')) {
-    errEl.textContent = 'รูปแบบอีเมลไม่ถูกต้อง';
-    errEl.className = 'login-error show'; return;
-  }
-
-  spin.className = 'login-spinner show';
-
-  try {
-    // โหลดข้อมูลพนักงานก่อน
-    const employees = await fetchSheet(GID.employees);
-    // หา email ใน column index 5 (คอลัมน์ที่ 6)
-    const found = employees.find(r => (r[5]||'').trim().toLowerCase() === email);
-
-    spin.className = 'login-spinner';
-
-    if (!found) {
-      errEl.textContent = 'ไม่พบอีเมลนี้ในระบบ กรุณาติดต่อ HR';
-      errEl.className = 'login-error show'; return;
-    }
-
-    // โหลดข้อมูลทั้งหมด
-    document.getElementById('login-page').style.display = 'none';
-    document.getElementById('main-page').style.display  = 'block';
-
-    setStatus('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
-
-    const [attendance, achievements, trainings, competencies] = await Promise.all([
-      fetchSheet(GID.attendance),
-      fetchSheet(GID.achievements),
-      fetchSheet(GID.trainings),
-      fetchSheet(GID.competencies),
-    ]);
-    const safety = GID.safety ? await fetchSheet(GID.safety).catch(()=>[]) : [];
-
-    DB = { employees, attendance, achievements, trainings, competencies, safety };
-
-    // เติม dropdown แต่ auto-select พนักงานที่ login
-    const sel = document.getElementById('emp-select');
-    sel.innerHTML = '<option value="">— เลือกพนักงาน —</option>';
-    employees.forEach((r, i) => {
-      if (!r[0]) return;
-      const o = document.createElement('option');
-      o.value = i;
-      o.textContent = `${r[0]}  –  ${r[1] || ''}`;
-      sel.appendChild(o);
-    });
-
-    // Auto-select พนักงานที่ตรงกับ email
-    const empIdx = employees.findIndex(r => (r[5]||'').trim().toLowerCase() === email);
-    if (empIdx >= 0) {
-      sel.value = empIdx;
-      renderEmployee();
-    }
-
-    setStatus(`✅ ยินดีต้อนรับ ${found[1] || found[0]}`, 'success');
-    document.getElementById('last-updated').textContent = `อัพเดท ${new Date().toLocaleTimeString('th-TH')}`;
-
-  } catch(e) {
-    spin.className = 'login-spinner';
-    errEl.textContent = `โหลดข้อมูลไม่สำเร็จ: ${e.message}`;
-    errEl.className = 'login-error show';
-  }
-}
-
 function setStatus(msg, type) {
   const b = document.getElementById('status-bar');
   b.innerHTML = msg; b.className = `status-bar visible ${type}`;
 }
 
-
-// ── OTP CONFIG ──
-// ใส่ Web App URL ของ Apps Script ที่นี่
-const API_URL = 'https://script.google.com/macros/s/AKfycbwhep-odc4TO1gRlvUcbycyKCLXR1U1op18AifEhzZyyXJmaKLb-h25lpZV8BJGnWqUyQ/exec'; // ← วาง Web App URL ตรงนี้
-
-let currentEmpId = null;
-
-async function requestOTP() {
-  const email = document.getElementById('login-email').value.trim();
-  if (!email) { loginStatus('email-status', 'กรุณากรอก Email', 'error'); return; }
-
-  const btn = document.getElementById('btn-request');
-  btn.disabled = true;
-  loginStatus('email-status', '⏳ กำลังส่ง OTP...', 'loading');
-
-  try {
-    const url = `${API_URL}?action=requestOTP&email=${encodeURIComponent(email)}`;
-    const res  = await fetch(url, { redirect: 'follow' });
-    const json = await res.json();
-
-    if (json.status !== 'ok') {
-      loginStatus('email-status', json.message, 'error');
-      btn.disabled = false;
-      return;
-    }
-
-    // ไปขั้นตอน OTP
-    document.getElementById('email-display').textContent = email;
-    document.getElementById('step-email').classList.remove('active');
-    document.getElementById('step-otp').classList.add('active');
-    document.getElementById('login-otp').focus();
-    loginStatus('otp-status', '', '');
-
-  } catch (e) {
-    loginStatus('email-status', '❌ เชื่อมต่อไม่ได้ ตรวจสอบ API URL', 'error');
-    btn.disabled = false;
-  }
-}
-
-async function verifyOTP() {
-  const email = document.getElementById('login-email').value.trim();
-  const otp   = document.getElementById('login-otp').value.trim();
-
-  if (otp.length !== 6) { loginStatus('otp-status', 'กรุณากรอก OTP ให้ครบ 6 หลัก', 'error'); return; }
-
-  const btn = document.getElementById('btn-verify');
-  btn.disabled = true;
-  loginStatus('otp-status', '⏳ กำลังตรวจสอบ...', 'loading');
-
-  try {
-    const url  = `${API_URL}?action=verifyOTP&email=${encodeURIComponent(email)}&otp=${otp}`;
-    const res  = await fetch(url, { redirect: 'follow' });
-    const json = await res.json();
-
-    if (json.status !== 'ok') {
-      loginStatus('otp-status', json.message, 'error');
-      btn.disabled = false;
-      return;
-    }
-
-    // Login สำเร็จ
-    currentEmpId = json.empId;
-    document.getElementById('login-screen').style.display = 'none';
-    loginStatus('otp-status', '', '');
-
-    // โหลดข้อมูลอัตโนมัติและเลือกพนักงานที่ Login
-    await loadData();
-    autoSelectEmployee(currentEmpId);
-
-  } catch (e) {
-    loginStatus('otp-status', '❌ เชื่อมต่อไม่ได้', 'error');
-    btn.disabled = false;
-  }
-}
-
-function backToEmail() {
-  document.getElementById('step-otp').classList.remove('active');
-  document.getElementById('step-email').classList.add('active');
-  document.getElementById('btn-request').disabled = false;
-  document.getElementById('login-otp').value = '';
-  loginStatus('email-status', '', '');
-}
-
-function loginStatus(id, msg, type) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.className = `login-status${type ? ' ' + type : ''}`;
-}
-
-function autoSelectEmployee(empId) {
-  const sel = document.getElementById('emp-select');
-  for (let o of sel.options) {
-    if (o.textContent.startsWith(empId)) {
-      sel.value = o.value;
-      renderEmployee();
-      break;
-    }
-  }
-}
-
-// Init empty grids
+// Init
 renderStars('mech-grid',    MECH, []);
 renderStars('elec-grid',    ELEC, []);
 renderStars('ops-grid',     OPS,  []);
 renderStars('machine-grid', MACH, []);
 </script>
-</div><!-- /main-page -->
 </body>
 </html>
