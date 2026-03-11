@@ -137,10 +137,72 @@
 
   .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); display: flex; align-items: center; gap: 12px; }
   .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* ── LOGIN PAGE ── */
+  #login-page {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #0f1c36 0%, #1a2744 60%, #1e3a6e 100%);
+    padding: 24px;
+  }
+  .login-box {
+    background: white; border-radius: 20px; padding: 44px 40px;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+  }
+  .login-logo {
+    width: 64px; height: 64px; background: var(--primary); border-radius: 16px;
+    display: grid; place-items: center; font-size: 30px; margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(26,39,68,0.25);
+  }
+  .login-title { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .login-sub   { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  .login-label { align-self: flex-start; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; width: 100%; }
+  .login-input {
+    width: 100%; padding: 12px 16px; border: 1.5px solid var(--border);
+    border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--text);
+    outline: none; transition: border-color .2s, box-shadow .2s; margin-bottom: 20px;
+  }
+  .login-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+  .login-btn {
+    width: 100%; padding: 13px; background: var(--primary); color: white;
+    border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: background .2s, transform .1s;
+    margin-bottom: 12px;
+  }
+  .login-btn:hover { background: #243660; transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+  .login-error {
+    width: 100%; background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;
+    border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 500;
+    display: none; margin-bottom: 8px; text-align: center;
+  }
+  .login-error.show { display: block; }
+  .login-spinner { display: none; width: 20px; height: 20px; border: 2.5px solid #ddd; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+  .login-spinner.show { display: block; }
+  #main-page { display: none; }
 </style>
 </head>
 <body>
 
+<!-- ── LOGIN PAGE ── -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-logo">👷</div>
+    <div class="login-title">ระบบข้อมูลพนักงาน</div>
+    <div class="login-sub">Maintenance Department</div>
+    <div class="login-label">📧 อีเมลของคุณ</div>
+    <input class="login-input" type="email" id="login-email"
+      placeholder="example@company.com"
+      onkeydown="if(event.key==='Enter') doLogin()" />
+    <div class="login-spinner" id="login-spinner"></div>
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+  </div>
+</div>
+
+<!-- ── MAIN PAGE ── -->
+<div id="main-page">
 <div class="top-bar">
   <div class="logo">👷</div>
   <div>
@@ -151,13 +213,9 @@
   <div class="badge" id="last-updated">ยังไม่ได้โหลดข้อมูล</div>
 </div>
 
-<div id="config-banner">
+<div id="config-banner" style="display:none">
   <label>📋 Google Sheet:</label>
   <div class="sheet-info">ID: 1MAIt_2SPfogEiIa1wAMpEDhoepuzm8rvNapy6LNKFdQ</div>
-  <button class="btn-load" onclick="loadData()">📥 โหลดข้อมูล</button>
-  <div style="color:#4a6a9a;font-size:12px;flex-basis:100%;margin-top:4px">
-    ⚠️ หาก โหลดไม่ได้ ให้ตรวจสอบว่า Google Sheet ตั้งค่า <strong style="color:#8fa3c8">File → Share → Publish to web → Entire Document → CSV → Publish</strong> แล้ว
-  </div>
 </div>
 
 <div class="main-wrapper">
@@ -480,6 +538,81 @@ function doSafety(id) {
   }).join('');
 }
 
+// ── LOGIN ──
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const errEl = document.getElementById('login-error');
+  const spin  = document.getElementById('login-spinner');
+  errEl.className = 'login-error';
+
+  if (!email) {
+    errEl.textContent = 'กรุณากรอกอีเมล';
+    errEl.className = 'login-error show'; return;
+  }
+  if (!email.includes('@')) {
+    errEl.textContent = 'รูปแบบอีเมลไม่ถูกต้อง';
+    errEl.className = 'login-error show'; return;
+  }
+
+  spin.className = 'login-spinner show';
+
+  try {
+    // โหลดข้อมูลพนักงานก่อน
+    const employees = await fetchSheet(GID.employees);
+    // หา email ใน column index 5 (คอลัมน์ที่ 6)
+    const found = employees.find(r => (r[5]||'').trim().toLowerCase() === email);
+
+    spin.className = 'login-spinner';
+
+    if (!found) {
+      errEl.textContent = 'ไม่พบอีเมลนี้ในระบบ กรุณาติดต่อ HR';
+      errEl.className = 'login-error show'; return;
+    }
+
+    // โหลดข้อมูลทั้งหมด
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('main-page').style.display  = 'block';
+
+    setStatus('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
+
+    const [attendance, achievements, trainings, competencies] = await Promise.all([
+      fetchSheet(GID.attendance),
+      fetchSheet(GID.achievements),
+      fetchSheet(GID.trainings),
+      fetchSheet(GID.competencies),
+    ]);
+    const safety = GID.safety ? await fetchSheet(GID.safety).catch(()=>[]) : [];
+
+    DB = { employees, attendance, achievements, trainings, competencies, safety };
+
+    // เติม dropdown แต่ auto-select พนักงานที่ login
+    const sel = document.getElementById('emp-select');
+    sel.innerHTML = '<option value="">— เลือกพนักงาน —</option>';
+    employees.forEach((r, i) => {
+      if (!r[0]) return;
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = `${r[0]}  –  ${r[1] || ''}`;
+      sel.appendChild(o);
+    });
+
+    // Auto-select พนักงานที่ตรงกับ email
+    const empIdx = employees.findIndex(r => (r[5]||'').trim().toLowerCase() === email);
+    if (empIdx >= 0) {
+      sel.value = empIdx;
+      renderEmployee();
+    }
+
+    setStatus(`✅ ยินดีต้อนรับ ${found[1] || found[0]}`, 'success');
+    document.getElementById('last-updated').textContent = `อัพเดท ${new Date().toLocaleTimeString('th-TH')}`;
+
+  } catch(e) {
+    spin.className = 'login-spinner';
+    errEl.textContent = `โหลดข้อมูลไม่สำเร็จ: ${e.message}`;
+    errEl.className = 'login-error show';
+  }
+}
+
 function setStatus(msg, type) {
   const b = document.getElementById('status-bar');
   b.innerHTML = msg; b.className = `status-bar visible ${type}`;
@@ -491,5 +624,6 @@ renderStars('elec-grid',    ELEC, []);
 renderStars('ops-grid',     OPS,  []);
 renderStars('machine-grid', MACH, []);
 </script>
+</div><!-- /main-page -->
 </body>
 </html>
