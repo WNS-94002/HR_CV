@@ -9,56 +9,33 @@
 <style>
   :root {
     --primary: #1a2744; --accent: #e8a020; --accent2: #3b82f6;
-    --surface: #f5f7fa; --card: #ffffff; --border: #dde3ee;
+    --surface: #f5f7fa; --card: #fff; --border: #dde3ee;
     --text: #1a2744; --text-secondary: #5a6a8a;
     --danger: #dc2626; --success: #059669; --muted: #8899bb;
     --shadow: 0 2px 12px rgba(26,39,68,0.08); --radius: 12px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Sarabun', sans-serif; background: var(--surface); color: var(--text); min-height: 100vh; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--surface); color: var(--text); }
 
   .top-bar {
     background: var(--primary); color: white; padding: 0 32px; height: 64px;
     display: flex; align-items: center; gap: 16px;
     position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.18);
   }
-  .top-bar .logo { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: grid; place-items: center; font-size: 18px; }
+  .logo { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: grid; place-items: center; font-size: 18px; }
   .top-bar h1 { font-size: 17px; font-weight: 600; }
-  .top-bar .spacer { flex: 1; }
-  .top-bar .badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 5px 14px; border-radius: 20px; font-size: 12px; color: #b8cfee; }
+  .spacer { flex: 1; }
+  .badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 5px 14px; border-radius: 20px; font-size: 12px; color: #b8cfee; }
 
   #config-banner {
-    background: linear-gradient(90deg, #1e3a6e, #1a2744);
+    background: linear-gradient(90deg,#1e3a6e,#1a2744);
     border-bottom: 2px solid var(--accent);
-    padding: 14px 32px; display: flex; align-items: flex-start; gap: 12px; flex-direction: column;
+    padding: 14px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   }
-  .config-row { display: flex; align-items: center; gap: 12px; width: 100%; flex-wrap: wrap; }
   #config-banner label { color: #8fa3c8; font-size: 13px; white-space: nowrap; }
-  #config-banner input {
-    flex: 1; min-width: 300px;
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
-    color: white; padding: 9px 14px; border-radius: 7px; font-size: 13px;
-    font-family: inherit; outline: none; transition: border-color 0.2s;
-  }
-  #config-banner input:focus { border-color: var(--accent); }
-  #config-banner input::placeholder { color: #4a6a9a; }
-  .btn-load {
-    background: var(--accent); color: #1a2744; border: none;
-    padding: 9px 24px; border-radius: 7px; font-size: 13px; font-weight: 700;
-    font-family: inherit; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap;
-  }
+  .btn-load { background: var(--accent); color: #1a2744; border: none; padding: 9px 24px; border-radius: 7px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: .2s; }
   .btn-load:hover { background: #f5b93a; transform: translateY(-1px); }
-
-  .step-guide {
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px; padding: 10px 16px; width: 100%;
-    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  }
-  .step { display: flex; align-items: center; gap: 7px; }
-  .step-num { background: var(--accent); color: #1a2744; width: 21px; height: 21px; border-radius: 50%; font-size: 11px; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
-  .step span { color: #8fa3c8; font-size: 12px; }
-  .step strong { color: #c8d8f0; }
-  .arr { color: #3a5a8a; font-size: 13px; }
+  .sheet-info { color: #6a9ad0; font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 7px 14px; border-radius: 7px; font-family: monospace; }
 
   .main-wrapper { max-width: 1400px; margin: 0 auto; padding: 24px 24px 48px; display: flex; flex-direction: column; gap: 20px; }
 
@@ -72,7 +49,7 @@
 
   .emp-selector { background: var(--card); border-radius: var(--radius); padding: 16px 22px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .emp-selector label { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
-  .emp-selector select { flex: 1; min-width: 200px; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 14px; font-family: inherit; font-size: 14px; color: var(--text); outline: none; cursor: pointer; background: white; transition: border-color 0.2s; }
+  .emp-selector select { flex: 1; min-width: 200px; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 14px; font-family: inherit; font-size: 14px; color: var(--text); outline: none; cursor: pointer; background: white; }
   .emp-selector select:focus { border-color: var(--accent2); }
   .emp-id-badge { background: var(--primary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; }
 
@@ -82,8 +59,8 @@
   .card-header h2 { font-size: 15px; font-weight: 600; color: var(--primary); }
   .card-body { padding: 20px 22px; }
 
-  .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
-  .info-field label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px,1fr)); gap: 16px; }
+  .info-field label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
   .info-field .value { font-size: 15px; font-weight: 600; }
   .info-field .value.accent { color: var(--accent); }
 
@@ -100,7 +77,7 @@
   .chart-wrap { position: relative; height: 260px; margin-top: 16px; }
 
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  @media (max-width:700px) { .two-col { grid-template-columns: 1fr; } }
   .list-panel { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
   .panel-head { padding: 12px 18px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
   .panel-head.good { background: #ecfdf5; color: var(--success); border-bottom: 1px solid #d1fae5; }
@@ -116,11 +93,11 @@
   .training-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--surface); border-radius: 8px; border-left: 3px solid var(--accent2); font-size: 13px; flex-wrap: wrap; }
   .t-date { color: var(--muted); font-size: 12px; min-width: 90px; }
   .t-pass { color: var(--success); font-weight: 600; font-size: 12px; }
-  .t-fail { color: var(--danger);  font-weight: 600; font-size: 12px; }
+  .t-fail { color: var(--danger); font-weight: 600; font-size: 12px; }
 
   .comp-section { margin-bottom: 20px; }
   .comp-section-title { font-size: 13px; font-weight: 600; color: var(--primary); background: var(--surface); border-left: 4px solid var(--accent); padding: 8px 14px; border-radius: 0 6px 6px 0; margin-bottom: 12px; }
-  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px,1fr)); gap: 10px; }
   .comp-item { background: var(--surface); border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); }
   .comp-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
   .comp-stars { display: flex; gap: 2px; }
@@ -129,12 +106,7 @@
   .comp-level { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
   .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); display: flex; align-items: center; gap: 12px; }
-  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  @media (max-width: 900px) {
-    .main-wrapper { padding: 16px 12px 32px; }
-    #config-banner { padding: 12px 16px; }
-  }
+  .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
 </style>
 </head>
 <body>
@@ -150,19 +122,11 @@
 </div>
 
 <div id="config-banner">
-  <div class="config-row">
-    <label>🔗 Web App URL:</label>
-    <input type="text" id="api-url" placeholder="https://script.google.com/macros/s/xxxxxxxx/exec" />
-    <button class="btn-load" onclick="loadData()">📥 โหลดข้อมูล</button>
-  </div>
-  <div class="step-guide">
-    <div class="step"><div class="step-num">1</div><span>เปิด Sheet → <strong>Extensions → Apps Script</strong> → วางโค้ดจากไฟล์ <strong>apps_script_api.gs</strong></span></div>
-    <div class="arr">›</div>
-    <div class="step"><div class="step-num">2</div><span><strong>Deploy → New deployment → Web app</strong></span></div>
-    <div class="arr">›</div>
-    <div class="step"><div class="step-num">3</div><span>Execute as: <strong>Me</strong> | Access: <strong>Anyone</strong> → Deploy</span></div>
-    <div class="arr">›</div>
-    <div class="step"><div class="step-num">4</div><span>คัดลอก <strong>Web App URL</strong> วางในช่องด้านบน</span></div>
+  <label>📋 Google Sheet:</label>
+  <div class="sheet-info">ID: 1MAIt_2SPfogEiIa1wAMpEDhoepuzm8rvNapy6LNKFdQ</div>
+  <button class="btn-load" onclick="loadData()">📥 โหลดข้อมูล</button>
+  <div style="color:#4a6a9a;font-size:12px;flex-basis:100%;margin-top:4px">
+    ⚠️ หาก โหลดไม่ได้ ให้ตรวจสอบว่า Google Sheet ตั้งค่า <strong style="color:#8fa3c8">File → Share → Publish to web → Entire Document → CSV → Publish</strong> แล้ว
   </div>
 </div>
 
@@ -250,45 +214,75 @@
 </div>
 
 <script>
+// ── Sheet Config (GID ที่ถูกต้องของคุณ) ──
+const SHEET_ID = '1MAIt_2SPfogEiIa1wAMpEDhoepuzm8rvNapy6LNKFdQ';
+const GID = {
+  employees    : '1749939647',
+  attendance   : '1200875504',
+  achievements : '1989441662',
+  trainings    : '1331065145',
+  competencies : '551239597'
+};
+
 const MECH   = ['งานเชื่อมโลหะ','งานสายพาน','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader','งานลูกกลิ้ง','งาน Oiler','งาน Component'];
 const ELEC   = ['งานไฟฟ้าแรงสูง','งานไฟฟ้าอาคาร','งานซ่อม Conveyor','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader'];
 const LEVELS = ['','มือใหม่','พอใช้','ชำนาญ','เชี่ยวชาญ','ผู้เชี่ยวชาญ'];
 
 let DB = {}, myChart = null;
 
-async function loadData() {
-  const url = document.getElementById('api-url').value.trim();
-  if (!url) { status('กรุณากรอก Web App URL', 'error'); return; }
-  if (!url.includes('script.google.com')) {
-    status('URL ไม่ถูกต้อง — ต้องเป็น https://script.google.com/macros/s/.../exec', 'error');
-    return;
-  }
+function csvUrl(gid) {
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
+}
 
-  status('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
+function parseCSV(text) {
+  return text.trim().split('\n').map(line => {
+    const res = []; let cur = ''; let q = false;
+    for (const c of line) {
+      if (c === '"') { q = !q; }
+      else if (c === ',' && !q) { res.push(cur.trim()); cur = ''; }
+      else { cur += c; }
+    }
+    res.push(cur.trim());
+    return res;
+  });
+}
+
+async function fetchSheet(gid) {
+  const res = await fetch(csvUrl(gid), { credentials: 'omit' });
+  if (!res.ok) throw new Error(`HTTP ${res.status} (gid=${gid})`);
+  const text = await res.text();
+  const rows = parseCSV(text);
+  return rows.slice(1).filter(r => r[0] && r[0] !== '');
+}
+
+async function loadData() {
+  setStatus('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
 
   try {
-    const res  = await fetch(url, { redirect: 'follow' });
-    if (!res.ok) throw new Error(`HTTP ${res.status} — ตรวจสอบการ Deploy อีกครั้ง`);
-    const json = await res.json();
-    if (json.status !== 'ok') throw new Error(json.message || 'Apps Script ตอบกลับผิดพลาด');
+    const [employees, attendance, achievements, trainings, competencies] = await Promise.all([
+      fetchSheet(GID.employees),
+      fetchSheet(GID.attendance),
+      fetchSheet(GID.achievements),
+      fetchSheet(GID.trainings),
+      fetchSheet(GID.competencies),
+    ]);
 
-    DB = json.data;
+    DB = { employees, attendance, achievements, trainings, competencies };
 
     const sel = document.getElementById('emp-select');
     sel.innerHTML = '<option value="">— เลือกพนักงาน —</option>';
-    (DB.employees || []).forEach((r, i) => {
-      if (!r[0]) return;
+    employees.forEach((r, i) => {
       const o = document.createElement('option');
       o.value = i;
       o.textContent = `${r[0]}  –  ${r[1] || ''}`;
       sel.appendChild(o);
     });
 
-    status(`✅ โหลดสำเร็จ — พบพนักงาน ${(DB.employees||[]).length} คน`, 'success');
+    setStatus(`✅ โหลดสำเร็จ — พบพนักงาน ${employees.length} คน`, 'success');
     document.getElementById('last-updated').textContent = `อัพเดท ${new Date().toLocaleTimeString('th-TH')}`;
 
   } catch (e) {
-    status(`❌ ${e.message}`, 'error');
+    setStatus(`❌ โหลดไม่สำเร็จ: ${e.message}<br><small>ตรวจสอบ: File → Share → Publish to web → Entire Document → CSV → Publish</small>`, 'error');
   }
 }
 
@@ -308,44 +302,45 @@ function renderEmployee() {
 }
 
 function doAttendance(id) {
-  const rows = (DB.attendance||[]).filter(r => String(r[0])===id);
+  const rows = DB.attendance.filter(r => String(r[0]) === id);
   const tbody = document.getElementById('att-body');
   tbody.innerHTML = '';
   if (!rows.length) {
     tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:20px;color:var(--muted)">ไม่มีข้อมูล</td></tr>';
-    if (myChart) { myChart.destroy(); myChart = null; } return;
+    if (myChart) { myChart.destroy(); myChart = null; }
+    return;
   }
   const months=[], work=[], absent=[], sick=[];
   rows.forEach(r => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r[1]||''}</td>`+
+    tr.innerHTML = `<td>${r[1]||''}</td>` +
       [r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12]]
-        .map(v=>`<td class="${(+v||0)===0?'zero':''}">${v!=null&&v!==''?v:0}</td>`).join('');
+        .map(v => `<td class="${(+v||0)===0?'zero':''}">${v!=null&&v!==''?v:0}</td>`).join('');
     tbody.appendChild(tr);
-    months.push(r[1]||'');
-    work.push(+(r[2])||0); absent.push(+(r[4])||0); sick.push(+(r[5])||0);
+    months.push(r[1]||''); work.push(+(r[2])||0); absent.push(+(r[4])||0); sick.push(+(r[5])||0);
   });
   if (myChart) myChart.destroy();
   myChart = new Chart(document.getElementById('att-chart'), {
-    type:'bar',
-    data:{ labels:months, datasets:[
-      {label:'วันทำงาน', data:work,   backgroundColor:'#1a2744', borderRadius:4},
-      {label:'ขาดงาน',   data:absent, backgroundColor:'#dc2626', borderRadius:4},
-      {label:'ลาป่วย',   data:sick,   backgroundColor:'#f59e0b', borderRadius:4},
+    type: 'bar',
+    data: { labels: months, datasets: [
+      { label:'วันทำงาน', data:work,   backgroundColor:'#1a2744', borderRadius:4 },
+      { label:'ขาดงาน',   data:absent, backgroundColor:'#dc2626', borderRadius:4 },
+      { label:'ลาป่วย',   data:sick,   backgroundColor:'#f59e0b', borderRadius:4 },
     ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'top', labels:{font:{family:'Sarabun',size:12}}},
-        title:{display:true,text:'กราฟสรุปการเข้าทำงานรายเดือน',font:{family:'Sarabun',size:14,weight:'600'},color:'#1a2744'}
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend: { position:'top', labels:{ font:{family:'Sarabun',size:12} } },
+        title: { display:true, text:'กราฟสรุปการเข้าทำงานรายเดือน', font:{family:'Sarabun',size:14,weight:'600'}, color:'#1a2744' }
       },
-      scales:{y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}},x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}}}}
+      scales: { y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}}, x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}} }
+    }
   });
 }
 
 function doAchievements(id) {
-  const rows = (DB.achievements||[]).filter(r=>String(r[0])===id);
-  const hi = rows.filter(r=>String(r[2]).includes('เด่น'));
-  const is = rows.filter(r=>String(r[2]).includes('ปัญหา'));
+  const rows = DB.achievements.filter(r => String(r[0]) === id);
+  const hi = rows.filter(r => String(r[2]).includes('เด่น'));
+  const is = rows.filter(r => String(r[2]).includes('ปัญหา'));
   document.getElementById('hi-list').innerHTML = hi.length
     ? hi.map(r=>`<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
     : '<div class="empty-state">ไม่มีข้อมูล</div>';
@@ -355,7 +350,7 @@ function doAchievements(id) {
 }
 
 function doTrainings(id) {
-  const rows = (DB.trainings||[]).filter(r=>String(r[0])===id);
+  const rows = DB.trainings.filter(r => String(r[0]) === id);
   document.getElementById('train-list').innerHTML = rows.length
     ? rows.map(r=>`<div class="training-item">
         <div class="t-date">📅 ${r[2]||''}</div>
@@ -367,13 +362,13 @@ function doTrainings(id) {
 }
 
 function doComp(id) {
-  const row = (DB.competencies||[]).find(r=>String(r[0])===id);
+  const row = DB.competencies.find(r => String(r[0]) === id);
   renderStars('mech-grid', MECH, row ? MECH.map((_,i)=>+(row[i+1])||0) : []);
   renderStars('elec-grid', ELEC, row ? ELEC.map((_,i)=>+(row[i+1+MECH.length])||0) : []);
 }
 
 function renderStars(gridId, skills, scores) {
-  document.getElementById(gridId).innerHTML = skills.map((name,i)=>{
+  document.getElementById(gridId).innerHTML = skills.map((name,i) => {
     const v = scores[i]||0;
     const stars = [1,2,3,4,5].map(n=>`<span class="star ${n<=v?'on':''}">\u2605</span>`).join('');
     return `<div class="comp-item">
@@ -384,11 +379,12 @@ function renderStars(gridId, skills, scores) {
   }).join('');
 }
 
-function status(msg, type) {
+function setStatus(msg, type) {
   const b = document.getElementById('status-bar');
   b.innerHTML = msg; b.className = `status-bar visible ${type}`;
 }
 
+// Init empty grids
 renderStars('mech-grid', MECH, []);
 renderStars('elec-grid', ELEC, []);
 </script>
