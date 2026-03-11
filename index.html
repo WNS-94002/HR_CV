@@ -281,7 +281,7 @@ const GID = {
   achievements : '1989441662',
   trainings    : '1331065145',
   competencies : '551239597',
-  safety       : '1979151490'   // ← ใส่ GID ของ Sheet ความปลอดภัยที่นี่
+  safety       : '1979151490'
 };
 
 const MECH   = ['งานเชื่อมโลหะ','งานสายพาน','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader','งานลูกกลิ้ง','งาน Oiler','งาน Component'];
@@ -321,14 +321,16 @@ async function loadData() {
   setStatus('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
 
   try {
-    const [employees, attendance, achievements, trainings, competencies, safety] = await Promise.all([
+    const [employees, attendance, achievements, trainings, competencies] = await Promise.all([
       fetchSheet(GID.employees),
       fetchSheet(GID.attendance),
       fetchSheet(GID.achievements),
       fetchSheet(GID.trainings),
       fetchSheet(GID.competencies),
-      fetchSheet(GID.safety).catch(()=>[]),
     ]);
+
+    // โหลด safety เฉพาะเมื่อกำหนด GID แล้ว
+    const safety = GID.safety ? await fetchSheet(GID.safety).catch(()=>[]) : [];
 
     DB = { employees, attendance, achievements, trainings, competencies, safety };
 
@@ -358,8 +360,8 @@ function renderEmployee() {
   document.getElementById('f-empid').textContent    = id || '—';
   document.getElementById('f-name').textContent     = r[1] || '—';
   document.getElementById('f-position').textContent = r[2] || '—';
-  document.getElementById('f-age').textContent      = r[3] ? r[3] : '—';
-  document.getElementById('f-tenure').textContent   = r[4] ? r[4] : '—';
+  document.getElementById('f-age').textContent      = r[3] || '—';
+  document.getElementById('f-tenure').textContent   = r[4] || '—';
   document.getElementById('emp-id-badge').textContent = id || '—';
   doAttendance(id); doAchievements(id); doTrainings(id); doComp(id); doSafety(id);
 }
