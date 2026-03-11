@@ -98,12 +98,26 @@
   .comp-section { margin-bottom: 20px; }
   .comp-section-title { font-size: 13px; font-weight: 600; color: var(--primary); background: var(--surface); border-left: 4px solid var(--accent); padding: 8px 14px; border-radius: 0 6px 6px 0; margin-bottom: 12px; }
   .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px,1fr)); gap: 10px; }
-  .comp-item { background: var(--surface); border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); }
+  /* ยังไม่ประเมิน */
+  .comp-item { background: var(--surface); border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border); opacity: 0.55; transition: .2s; }
   .comp-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
   .comp-stars { display: flex; gap: 2px; }
   .star { font-size: 18px; color: #ddd; }
   .star.on { color: var(--accent); }
   .comp-level { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  /* มีการประเมิน */
+  .comp-item.assessed { background: #fff; border: 1.5px solid var(--accent); opacity: 1; box-shadow: 0 2px 8px rgba(232,160,32,0.15); }
+  .comp-item.assessed .comp-name  { color: var(--primary); font-weight: 600; }
+  .comp-item.assessed .comp-level { color: var(--accent); font-weight: 700; font-size: 12px; }
+  /* Safety */
+  .safety-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px,1fr)); gap: 12px; }
+  .safety-item { background: var(--card); border-radius: 10px; border: 1px solid var(--border); padding: 16px 18px; display: flex; flex-direction: column; gap: 5px; box-shadow: var(--shadow); }
+  .safety-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; line-height: 1.4; }
+  .safety-value { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .safety-value.ok      { color: var(--success); }
+  .safety-value.warn    { color: #d97706; }
+  .safety-value.danger  { color: var(--danger); }
+  .safety-unit { font-size: 11px; color: var(--muted); }
 
   .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); display: flex; align-items: center; gap: 12px; }
   .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
@@ -176,6 +190,16 @@
     </div>
   </div>
 
+  <div class="section-label">ความปลอดภัย</div>
+  <div class="card">
+    <div class="card-header"><div class="icon">🦺</div><h2>สรุปความปลอดภัย</h2></div>
+    <div class="card-body">
+      <div class="safety-grid" id="safety-grid">
+        <div class="empty-state">ยังไม่มีข้อมูล</div>
+      </div>
+    </div>
+  </div>
+
   <div class="section-label">ผลงาน</div>
   <div class="two-col">
     <div class="list-panel">
@@ -219,6 +243,16 @@
     </div>
   </div>
 
+  <div class="section-label">ความปลอดภัย</div>
+  <div class="card">
+    <div class="card-header"><div class="icon">🦺</div><h2>สรุปความปลอดภัย</h2></div>
+    <div class="card-body">
+      <div class="safety-grid" id="safety-grid">
+        <div class="empty-state">ยังไม่มีข้อมูล</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -230,7 +264,8 @@ const GID = {
   attendance   : '1200875504',
   achievements : '1989441662',
   trainings    : '1331065145',
-  competencies : '551239597'
+  competencies : '551239597',
+  safety       : '1979151490'   // ← ใส่ GID ของ Sheet ความปลอดภัยที่นี่
 };
 
 const MECH   = ['งานเชื่อมโลหะ','งานสายพาน','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader','งานลูกกลิ้ง','งาน Oiler','งาน Component'];
@@ -270,15 +305,16 @@ async function loadData() {
   setStatus('<span class="spin">⏳</span>&nbsp; กำลังโหลดข้อมูล...', 'loading');
 
   try {
-    const [employees, attendance, achievements, trainings, competencies] = await Promise.all([
+    const [employees, attendance, achievements, trainings, competencies, safety] = await Promise.all([
       fetchSheet(GID.employees),
       fetchSheet(GID.attendance),
       fetchSheet(GID.achievements),
       fetchSheet(GID.trainings),
       fetchSheet(GID.competencies),
+      fetchSheet(GID.safety).catch(()=>[]),
     ]);
 
-    DB = { employees, attendance, achievements, trainings, competencies };
+    DB = { employees, attendance, achievements, trainings, competencies, safety };
 
     const sel = document.getElementById('emp-select');
     sel.innerHTML = '<option value="">— เลือกพนักงาน —</option>';
@@ -309,7 +345,7 @@ function renderEmployee() {
   document.getElementById('f-age').textContent      = r[3] ? r[3] : '—';
   document.getElementById('f-tenure').textContent   = r[4] ? r[4] : '—';
   document.getElementById('emp-id-badge').textContent = id || '—';
-  doAttendance(id); doAchievements(id); doTrainings(id); doComp(id);
+  doAttendance(id); doAchievements(id); doTrainings(id); doComp(id); doSafety(id);
 }
 
 function doAttendance(id) {
@@ -389,6 +425,35 @@ function renderStars(gridId, skills, scores) {
       <div class="comp-name">${name}</div>
       <div class="comp-stars">${stars}</div>
       <div class="comp-level">${v?LEVELS[v]:'ยังไม่ประเมิน'}</div>
+    </div>`;
+  }).join('');
+}
+
+function doSafety(id) {
+  const row = (DB.safety||[]).find(r => String(r[0]) === id);
+  const grid = document.getElementById('safety-grid');
+  if (!row) { grid.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลความปลอดภัย</div>'; return; }
+
+  const fields = [
+    { label: '🗣️ Safety Talk', val: row[1], unit: 'ครั้ง/เดือน', warn: 0 },
+    { label: '👥 Small Group Talk', val: row[2], unit: 'ครั้ง/เดือน', warn: 0 },
+    { label: '📋 BBSO', val: row[3], unit: 'ครั้ง/เดือน', warn: 0 },
+    { label: '🩹 การบาดเจ็บจากการทำงาน', val: row[4], unit: 'ครั้ง', danger: true },
+    { label: '⚠️ การเกิดอุบัติเหตุ', val: row[5], unit: 'ครั้ง', danger: true },
+  ];
+
+  grid.innerHTML = fields.map(f => {
+    const v = f.val != null && f.val !== '' ? f.val : '—';
+    const num = parseFloat(v);
+    let cls = '';
+    if (!isNaN(num)) {
+      if (f.danger) cls = num === 0 ? 'ok' : 'danger';
+      else cls = num === 0 ? 'warn' : 'ok';
+    }
+    return `<div class="safety-item">
+      <div class="safety-label">${f.label}</div>
+      <div class="safety-value ${cls}">${v}</div>
+      <div class="safety-unit">${f.unit}</div>
     </div>`;
   }).join('');
 }
