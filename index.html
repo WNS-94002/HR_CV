@@ -119,14 +119,18 @@
   .comp-item.lv5 .comp-level{color:#16a34a;font-weight:700;font-size:12px;}
 
   /* ── SAFETY ── */
-  .safety-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;}
-  .safety-item{background:var(--card);border-radius:10px;border:1px solid var(--border);padding:16px 18px;display:flex;flex-direction:column;gap:5px;box-shadow:var(--shadow);}
-  .safety-label{font-size:12px;color:var(--text-secondary);font-weight:500;line-height:1.4;}
-  .safety-value{font-size:26px;font-weight:700;color:var(--primary);}
-  .safety-value.ok{color:var(--success);}
-  .safety-value.warn{color:#d97706;}
-  .safety-value.danger{color:var(--danger);}
-  .safety-unit{font-size:11px;color:var(--muted);}
+  .safety-wrap{overflow-x:auto;}
+  .safety-table{width:100%;border-collapse:collapse;font-size:13px;min-width:620px;}
+  .safety-table th{background:var(--primary);color:white;padding:9px 12px;text-align:center;font-weight:500;white-space:nowrap;font-size:12px;}
+  .safety-table th:first-child{text-align:left;}
+  .safety-table td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap;}
+  .safety-table td:first-child{text-align:left;font-weight:600;color:var(--primary);}
+  .safety-table tr:nth-child(even) td{background:#f8fafc;}
+  .safety-table tr:hover td{background:#eef3fb;}
+  .s-ok{color:var(--success);font-weight:700;}
+  .s-warn{color:#d97706;font-weight:700;}
+  .s-danger{color:var(--danger);font-weight:700;}
+  .safety-chart-wrap{position:relative;height:240px;margin-top:16px;}
 
   .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:12px;}
   .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
@@ -200,9 +204,22 @@
   <div class="card">
     <div class="card-header"><div class="icon">🦺</div><h2>สรุปความปลอดภัย</h2></div>
     <div class="card-body">
-      <div class="safety-grid" id="safety-grid">
-        <div class="empty-state">ยังไม่มีข้อมูล</div>
+      <div class="safety-wrap">
+        <table class="safety-table">
+          <thead><tr>
+            <th>เดือน</th>
+            <th>🗣️ Safety Talk</th>
+            <th>👥 Small Group Talk</th>
+            <th>📋 BBSO</th>
+            <th>🩹 บาดเจ็บ</th>
+            <th>⚠️ อุบัติเหตุ</th>
+          </tr></thead>
+          <tbody id="safety-body">
+            <tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>
+          </tbody>
+        </table>
       </div>
+      <div class="safety-chart-wrap"><canvas id="safety-chart"></canvas></div>
     </div>
   </div>
 
@@ -373,28 +390,56 @@ function doAttendance(id) {
   });
 }
 
+let safetyChart = null;
 function doSafety(id) {
-  const row = (DB.safety||[]).find(r => String(r[0]) === id);
-  const grid = document.getElementById('safety-grid');
-  if (!row) { grid.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลความปลอดภัย</div>'; return; }
-  const fields = [
-    { label:'🗣️ Safety Talk',            val:row[1], unit:'ครั้ง/เดือน', danger:false },
-    { label:'👥 Small Group Talk',        val:row[2], unit:'ครั้ง/เดือน', danger:false },
-    { label:'📋 BBSO',                    val:row[3], unit:'ครั้ง/เดือน', danger:false },
-    { label:'🩹 การบาดเจ็บจากการทำงาน', val:row[4], unit:'ครั้ง',        danger:true  },
-    { label:'⚠️ การเกิดอุบัติเหตุ',      val:row[5], unit:'ครั้ง',        danger:true  },
-  ];
-  grid.innerHTML = fields.map(f => {
-    const v = (f.val != null && f.val !== '') ? f.val : '—';
-    const num = parseFloat(v);
-    let cls = '';
-    if (!isNaN(num)) cls = f.danger ? (num === 0 ? 'ok' : 'danger') : (num === 0 ? 'warn' : 'ok');
-    return `<div class="safety-item">
-      <div class="safety-label">${f.label}</div>
-      <div class="safety-value ${cls}">${v}</div>
-      <div class="safety-unit">${f.unit}</div>
-    </div>`;
+  const rows = (DB.safety||[]).filter(r => String(r[0]) === id);
+  const tbody = document.getElementById('safety-body');
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">ไม่มีข้อมูลความปลอดภัย</td></tr>';
+    if (safetyChart) { safetyChart.destroy(); safetyChart = null; }
+    return;
+  }
+
+  // col: [0]=รหัส [1]=เดือน [2]=SafetyTalk [3]=SGT [4]=BBSO [5]=บาดเจ็บ [6]=อุบัติเหตุ
+  const months=[], st=[], sgt=[], bbso=[], inj=[], acc=[];
+
+  tbody.innerHTML = rows.map(r => {
+    const month = r[1]||'';
+    const v2 = +(r[2])||0, v3 = +(r[3])||0, v4 = +(r[4])||0;
+    const v5 = +(r[5])||0, v6 = +(r[6])||0;
+    months.push(month); st.push(v2); sgt.push(v3); bbso.push(v4); inj.push(v5); acc.push(v6);
+    const injCls = v5===0?'s-ok':'s-danger';
+    const accCls = v6===0?'s-ok':'s-danger';
+    return `<tr>
+      <td>${month}</td>
+      <td>${v2}</td>
+      <td>${v3}</td>
+      <td>${v4}</td>
+      <td class="${injCls}">${v5}</td>
+      <td class="${accCls}">${v6}</td>
+    </tr>`;
   }).join('');
+
+  // กราฟ
+  if (safetyChart) safetyChart.destroy();
+  safetyChart = new Chart(document.getElementById('safety-chart'), {
+    type: 'bar',
+    data: { labels: months, datasets: [
+      { label:'Safety Talk',    data:st,   backgroundColor:'#3b82f6', borderRadius:4 },
+      { label:'Small Group',    data:sgt,  backgroundColor:'#8b5cf6', borderRadius:4 },
+      { label:'BBSO',           data:bbso, backgroundColor:'#f59e0b', borderRadius:4 },
+      { label:'บาดเจ็บ',        data:inj,  backgroundColor:'#ef4444', borderRadius:4 },
+      { label:'อุบัติเหตุ',     data:acc,  backgroundColor:'#dc2626', borderRadius:4 },
+    ]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'top', labels:{font:{family:'Sarabun',size:12}} },
+        title:{ display:true, text:'กราฟสรุปความปลอดภัยรายเดือน', font:{family:'Sarabun',size:14,weight:'600'}, color:'#1a2744' }
+      },
+      scales:{ y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}}, x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}} }
+    }
+  });
 }
 
 function doAchievements(id) {
