@@ -226,7 +226,7 @@
   <div class="section-label">ผลงาน</div>
   <div class="two-col">
     <div class="list-panel">
-      <div class="panel-head good">⭐ งานเด่นของพนักงาน</div>
+      <div class="panel-head good">⭐ งานสำคัญของพนักงาน</div>
       <div class="list-items" id="hi-list"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
     </div>
     <div class="list-panel">
@@ -444,7 +444,7 @@ function doSafety(id) {
 
 function doAchievements(id) {
   const rows = DB.achievements.filter(r => String(r[0]) === id);
-  const hi = rows.filter(r => String(r[2]).includes('เด่น'));
+  const hi = rows.filter(r => String(r[2]).includes('สำคัญ'));
   const is = rows.filter(r => String(r[2]).includes('ปัญหา'));
   document.getElementById('hi-list').innerHTML = hi.length
     ? hi.map(r => `<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
