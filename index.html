@@ -363,9 +363,6 @@
     </div>
   </div>
 
-  <!-- KPI Row -->
-  <div id="group-kpi-row" class="group-kpi-row" style="display:none;"></div>
-
   <!-- Employee List -->
   <div class="section-label">รายชื่อพนักงานในกลุ่ม</div>
   <div class="card" id="group-emp-card">
@@ -408,31 +405,6 @@
     </div>
   </div>
 
-  <!-- Competency Heatmap -->
-  <div class="section-label">ระดับความสามารถเฉลี่ยของกลุ่ม</div>
-  <div class="card">
-    <div class="card-header"><div class="icon">🔧</div><h2>Competency Overview</h2></div>
-    <div class="card-body">
-      <div style="margin-bottom:10px;font-size:12px;color:var(--muted);">
-        แสดงจำนวนพนักงานในแต่ละระดับ &nbsp;
-        <span style="display:inline-block;width:12px;height:12px;background:#dbeafe;border-radius:2px;vertical-align:middle;"></span> มือใหม่ &nbsp;
-        <span style="display:inline-block;width:12px;height:12px;background:#ede9fe;border-radius:2px;vertical-align:middle;"></span> พอใช้ &nbsp;
-        <span style="display:inline-block;width:12px;height:12px;background:#fef3c7;border-radius:2px;vertical-align:middle;"></span> ชำนาญ &nbsp;
-        <span style="display:inline-block;width:12px;height:12px;background:#fed7aa;border-radius:2px;vertical-align:middle;"></span> เชี่ยวชาญ &nbsp;
-        <span style="display:inline-block;width:12px;height:12px;background:#bbf7d0;border-radius:2px;vertical-align:middle;"></span> ผู้เชี่ยวชาญ
-      </div>
-      <div class="skill-heatmap" id="skill-heatmap"></div>
-    </div>
-  </div>
-
-  <!-- Training Summary -->
-  <div class="section-label">สรุปการอบรม</div>
-  <div class="card">
-    <div class="card-header"><div class="icon">🎓</div><h2>สรุปการอบรมของกลุ่ม</h2></div>
-    <div class="card-body">
-      <div id="group-train-summary"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
-    </div>
-  </div>
 
 </div>
 </div>
@@ -521,7 +493,13 @@ function switchTab(tab) {
 function getGroups() {
   if (!DB.employees) return [];
   const groups = [...new Set(DB.employees.map(r => String(r[5] || '').trim()).filter(g => g))];
-  return groups.sort();
+  return groups.sort((a, b) => {
+    const cvA = a.match(/^CV(\d+)$/i), cvB = b.match(/^CV(\d+)$/i);
+    if (cvA && cvB) return +cvA[1] - +cvB[1];
+    if (cvA) return -1;
+    if (cvB) return 1;
+    return a.localeCompare(b, 'th');
+  });
 }
 
 function buildGroupButtons() {
@@ -553,35 +531,6 @@ function renderGroup(groupName) {
   // Get employees in this group (column F = index 5)
   const members = DB.employees.filter(r => String(r[5] || '').trim() === groupName);
   const memberIds = members.map(r => String(r[0]));
-
-  // Attendance for these members
-  const attRows = DB.attendance.filter(r => memberIds.includes(String(r[0])));
-  const safetyRows = (DB.safety || []).filter(r => memberIds.includes(String(r[0])));
-  const trainRows = DB.trainings.filter(r => memberIds.includes(String(r[0])));
-  const compRows = DB.competencies.filter(r => memberIds.includes(String(r[0])));
-
-  // KPIs
-  const totalWork = attRows.reduce((s, r) => s + (+(r[2]) || 0), 0);
-  const totalAbsent = attRows.reduce((s, r) => s + (+(r[4]) || 0), 0);
-  const totalSick = attRows.reduce((s, r) => s + (+(r[5]) || 0), 0);
-  const totalInjury = safetyRows.reduce((s, r) => s + (+(r[5]) || 0), 0);
-  const totalAcc = safetyRows.reduce((s, r) => s + (+(r[6]) || 0), 0);
-  const totalSafetyTalk = safetyRows.reduce((s, r) => s + (+(r[2]) || 0), 0);
-  const avgWork = members.length ? (totalWork / members.length).toFixed(1) : 0;
-
-  // KPI cards
-  const kpiRow = document.getElementById('group-kpi-row');
-  kpiRow.style.display = 'grid';
-  kpiRow.innerHTML = `
-    <div class="kpi-card accent-card"><div class="kpi-icon">👥</div><div class="kpi-val">${members.length}</div><div class="kpi-label">จำนวนพนักงาน</div></div>
-    <div class="kpi-card"><div class="kpi-icon">📅</div><div class="kpi-val">${totalWork}</div><div class="kpi-label">วันทำงานรวม</div></div>
-    <div class="kpi-card"><div class="kpi-icon">📊</div><div class="kpi-val">${avgWork}</div><div class="kpi-label">วันเฉลี่ย/คน</div></div>
-    <div class="kpi-card red-card"><div class="kpi-icon">🚫</div><div class="kpi-val">${totalAbsent}</div><div class="kpi-label">ขาดงานรวม</div></div>
-    <div class="kpi-card"><div class="kpi-icon">🤒</div><div class="kpi-val">${totalSick}</div><div class="kpi-label">ลาป่วยรวม</div></div>
-    <div class="kpi-card ${totalInjury > 0 ? 'red-card' : 'green-card'}"><div class="kpi-icon">🩹</div><div class="kpi-val">${totalInjury}</div><div class="kpi-label">บาดเจ็บรวม</div></div>
-    <div class="kpi-card ${totalAcc > 0 ? 'red-card' : 'green-card'}"><div class="kpi-icon">⚠️</div><div class="kpi-val">${totalAcc}</div><div class="kpi-label">อุบัติเหตุรวม</div></div>
-    <div class="kpi-card"><div class="kpi-icon">🗣️</div><div class="kpi-val">${totalSafetyTalk}</div><div class="kpi-label">Safety Talk รวม</div></div>
-  `;
 
   // Employee table
   document.getElementById('group-emp-title').textContent = `กลุ่ม: ${groupName} (${members.length} คน)`;
@@ -694,11 +643,6 @@ function renderGroup(groupName) {
     }
   });
 
-  // Competency heatmap
-  renderGroupComp(memberIds);
-
-  // Training summary
-  renderGroupTraining(memberIds, trainRows);
 }
 
 function renderGroupComp(memberIds) {
