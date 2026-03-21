@@ -29,6 +29,14 @@
   .btn-load{background:var(--accent);color:#1a2744;border:none;padding:9px 24px;border-radius:7px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s;}
   .btn-load:hover{background:#f5b93a;transform:translateY(-1px);}
 
+  /* ── TABS ── */
+  .tab-bar{background:var(--primary);padding:0 32px;display:flex;gap:4px;border-bottom:2px solid rgba(255,255,255,0.08);}
+  .tab-btn{background:transparent;border:none;color:#8fa3c8;padding:14px 22px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+  .tab-btn:hover{color:#cde;}
+  .tab-btn.active{color:white;border-bottom-color:var(--accent);}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+
   .main-wrapper{max-width:1400px;margin:0 auto;padding:24px 24px 48px;display:flex;flex-direction:column;gap:20px;}
 
   .status-bar{display:none;padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;align-items:center;gap:10px;}
@@ -61,8 +69,6 @@
   .dropdown-item .emp-name{flex:1;}
   .dropdown-item mark{background:#fff3c4;color:#92400e;border-radius:2px;padding:0 1px;}
   .dropdown-empty{padding:14px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;}
-
-  /* scrollbar */
   .dropdown-list::-webkit-scrollbar{width:5px;}
   .dropdown-list::-webkit-scrollbar-track{background:transparent;}
   .dropdown-list::-webkit-scrollbar-thumb{background:#c8d3e8;border-radius:4px;}
@@ -148,6 +154,58 @@
 
   .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:12px;}
   .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  /* ── GROUP OVERVIEW ── */
+  .group-filter-bar{background:var(--card);border-radius:var(--radius);padding:14px 20px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .group-filter-bar label{font-size:13px;color:var(--text-secondary);font-weight:500;white-space:nowrap;}
+  .group-btn{background:var(--surface);border:1.5px solid var(--border);color:var(--text);padding:7px 18px;border-radius:20px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:.2s;white-space:nowrap;}
+  .group-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+  .group-btn.active{background:var(--primary);border-color:var(--primary);color:white;}
+
+  .group-kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
+  .kpi-card{background:var(--card);border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow);border:1px solid var(--border);text-align:center;}
+  .kpi-icon{font-size:26px;margin-bottom:6px;}
+  .kpi-val{font-size:28px;font-weight:700;color:var(--primary);line-height:1;}
+  .kpi-label{font-size:12px;color:var(--muted);margin-top:4px;}
+  .kpi-card.accent-card{background:var(--primary);}
+  .kpi-card.accent-card .kpi-val{color:var(--accent);}
+  .kpi-card.accent-card .kpi-label{color:#8fa3c8;}
+  .kpi-card.green-card .kpi-val{color:var(--success);}
+  .kpi-card.red-card .kpi-val{color:var(--danger);}
+
+  .group-emp-table-wrap{overflow-x:auto;}
+  .group-emp-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .group-emp-table th{background:var(--primary);color:white;padding:9px 12px;text-align:left;font-weight:500;white-space:nowrap;font-size:12px;}
+  .group-emp-table th.center{text-align:center;}
+  .group-emp-table td{padding:8px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .group-emp-table td.center{text-align:center;}
+  .group-emp-table tr:nth-child(even) td{background:#f8fafc;}
+  .group-emp-table tr:hover td{cursor:pointer;background:#eef3fb;}
+  .pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600;}
+  .pill-green{background:#d1fae5;color:#065f46;}
+  .pill-red{background:#fee2e2;color:#991b1b;}
+  .pill-yellow{background:#fef3c7;color:#92400e;}
+
+  .group-charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:700px){.group-charts-row{grid-template-columns:1fr;}}
+  .group-chart-card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .group-chart-title{font-size:13px;font-weight:600;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .group-chart-wrap{position:relative;height:220px;}
+
+  .skill-heatmap{display:grid;gap:6px;}
+  .skill-row{display:flex;align-items:center;gap:8px;font-size:12px;}
+  .skill-name{width:160px;flex-shrink:0;color:var(--text-secondary);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .skill-bars{display:flex;gap:3px;flex:1;}
+  .skill-bar-seg{height:20px;border-radius:3px;transition:.3s;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;min-width:20px;}
+  .skill-count{width:28px;text-align:right;color:var(--muted);font-size:11px;flex-shrink:0;}
+
+  .safety-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px;}
+  .safety-kpi{background:var(--surface);border-radius:8px;padding:12px 14px;border:1px solid var(--border);text-align:center;}
+  .safety-kpi .val{font-size:22px;font-weight:700;}
+  .safety-kpi .lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+
+  /* attendance trend in group tab */
+  .group-att-chart-wrap{position:relative;height:240px;}
 </style>
 </head>
 <body>
@@ -168,23 +226,24 @@
   <button class="btn-load" onclick="loadData()">📥 โหลดข้อมูล</button>
 </div>
 
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('emp')" id="tab-emp">👤 ข้อมูลพนักงาน</button>
+  <button class="tab-btn" onclick="switchTab('group')" id="tab-group">👥 ภาพรวม Group</button>
+</div>
+
+<!-- ═══════════════════════════════ TAB: EMPLOYEE ═══════════════════════════════ -->
+<div class="tab-content active" id="content-emp">
 <div class="main-wrapper">
 
   <div class="status-bar" id="status-bar"></div>
 
-  <!-- SEARCHABLE EMPLOYEE SELECTOR -->
   <div class="emp-selector">
     <label>👤 เลือกพนักงาน:</label>
     <div class="search-wrap" id="search-wrap">
-      <input
-        type="text"
-        class="search-input"
-        id="emp-search"
+      <input type="text" class="search-input" id="emp-search"
         placeholder="พิมพ์ชื่อหรือรหัสพนักงาน..."
-        autocomplete="off"
-        oninput="onSearchInput()"
-        onfocus="openDropdown()"
-      />
+        autocomplete="off" oninput="onSearchInput()" onfocus="openDropdown()"/>
       <button class="search-clear" id="search-clear" onclick="clearSearch()" title="ล้างการค้นหา">✕</button>
       <div class="dropdown-list" id="dropdown-list"></div>
     </div>
@@ -201,6 +260,7 @@
         <div class="info-field"><label>ตำแหน่งงาน</label><div class="value" id="f-position">—</div></div>
         <div class="info-field"><label>อายุพนักงาน</label><div class="value" id="f-age">—</div></div>
         <div class="info-field"><label>อายุงาน</label><div class="value" id="f-tenure">—</div></div>
+        <div class="info-field"><label>กลุ่มงาน</label><div class="value" id="f-group">—</div></div>
       </div>
     </div>
   </div>
@@ -233,11 +293,8 @@
         <table class="safety-table">
           <thead><tr>
             <th>เดือน</th>
-            <th>🗣️ Safety Talk</th>
-            <th>👥 Small Group Talk</th>
-            <th>📋 BBSO</th>
-            <th>🩹 บาดเจ็บ</th>
-            <th>⚠️ อุบัติเหตุ</th>
+            <th>🗣️ Safety Talk</th><th>👥 Small Group Talk</th>
+            <th>📋 BBSO</th><th>🩹 บาดเจ็บ</th><th>⚠️ อุบัติเหตุ</th>
           </tr></thead>
           <tbody id="safety-body">
             <tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>
@@ -292,6 +349,93 @@
   </div>
 
 </div>
+</div>
+
+<!-- ═══════════════════════════════ TAB: GROUP OVERVIEW ═══════════════════════════════ -->
+<div class="tab-content" id="content-group">
+<div class="main-wrapper">
+
+  <!-- Group filter buttons -->
+  <div class="group-filter-bar">
+    <label>🏷️ เลือก Group:</label>
+    <div id="group-btn-list" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span style="color:var(--muted);font-size:13px;">โหลดข้อมูลก่อน</span>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div id="group-kpi-row" class="group-kpi-row" style="display:none;"></div>
+
+  <!-- Employee List -->
+  <div class="section-label">รายชื่อพนักงานในกลุ่ม</div>
+  <div class="card" id="group-emp-card">
+    <div class="card-header"><div class="icon">👥</div><h2 id="group-emp-title">—</h2></div>
+    <div class="card-body">
+      <div class="group-emp-table-wrap">
+        <table class="group-emp-table">
+          <thead>
+            <tr>
+              <th>รหัส</th>
+              <th>ชื่อ-สกุล</th>
+              <th>ตำแหน่งงาน</th>
+              <th class="center">อายุงาน</th>
+              <th class="center">วันทำงาน (รวม)</th>
+              <th class="center">ขาดงาน (รวม)</th>
+              <th class="center">ลาป่วย (รวม)</th>
+              <th class="center">Safety Talk</th>
+              <th class="center">บาดเจ็บ</th>
+              <th class="center">อุบัติเหตุ</th>
+            </tr>
+          </thead>
+          <tbody id="group-emp-body">
+            <tr><td colspan="10" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="section-label">สถิติกลุ่ม</div>
+  <div class="group-charts-row">
+    <div class="group-chart-card">
+      <div class="group-chart-title">📅 วันทำงาน vs ขาดงาน (รวมทุกเดือน)</div>
+      <div class="group-chart-wrap"><canvas id="group-att-chart"></canvas></div>
+    </div>
+    <div class="group-chart-card">
+      <div class="group-chart-title">🦺 สรุปความปลอดภัย (รวมทุกเดือน)</div>
+      <div class="group-chart-wrap"><canvas id="group-safety-chart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Competency Heatmap -->
+  <div class="section-label">ระดับความสามารถเฉลี่ยของกลุ่ม</div>
+  <div class="card">
+    <div class="card-header"><div class="icon">🔧</div><h2>Competency Overview</h2></div>
+    <div class="card-body">
+      <div style="margin-bottom:10px;font-size:12px;color:var(--muted);">
+        แสดงจำนวนพนักงานในแต่ละระดับ &nbsp;
+        <span style="display:inline-block;width:12px;height:12px;background:#dbeafe;border-radius:2px;vertical-align:middle;"></span> มือใหม่ &nbsp;
+        <span style="display:inline-block;width:12px;height:12px;background:#ede9fe;border-radius:2px;vertical-align:middle;"></span> พอใช้ &nbsp;
+        <span style="display:inline-block;width:12px;height:12px;background:#fef3c7;border-radius:2px;vertical-align:middle;"></span> ชำนาญ &nbsp;
+        <span style="display:inline-block;width:12px;height:12px;background:#fed7aa;border-radius:2px;vertical-align:middle;"></span> เชี่ยวชาญ &nbsp;
+        <span style="display:inline-block;width:12px;height:12px;background:#bbf7d0;border-radius:2px;vertical-align:middle;"></span> ผู้เชี่ยวชาญ
+      </div>
+      <div class="skill-heatmap" id="skill-heatmap"></div>
+    </div>
+  </div>
+
+  <!-- Training Summary -->
+  <div class="section-label">สรุปการอบรม</div>
+  <div class="card">
+    <div class="card-header"><div class="icon">🎓</div><h2>สรุปการอบรมของกลุ่ม</h2></div>
+    <div class="card-body">
+      <div id="group-train-summary"><div class="empty-state">ยังไม่มีข้อมูล</div></div>
+    </div>
+  </div>
+
+</div>
+</div>
 
 <script>
 const PUB_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpLtfM31k_zMu2oK-R_CnlIzxPeT68UWppRodZG_Ry4xFZIISVMys7MyR5Cyoswe_E7cal08M3Zjha/pub';
@@ -308,13 +452,15 @@ const MECH   = ['งานเชื่อมโลหะ','งานสายพ
 const ELEC   = ['งานไฟฟ้าแรงสูง','งานไฟฟ้าอาคาร','งานซ่อม Conveyor','งานซ่อม Crusher','งานซ่อม BWE','งานซ่อม Spreader'];
 const OPS    = ['ควบคุม Conveyor','ควบคุม Crusher','ควบคุม Spreader','ควบคุม CCR','การทำความสะอาดเครื่องจักร'];
 const MACH   = ['Wheel Loader','Wheel Excavator','Skid Steer','Hydraulic Excavator'];
+const ALL_SKILLS = [...MECH, ...ELEC, ...OPS, ...MACH];
 const LEVELS = ['','มือใหม่','พอใช้','ชำนาญ','เชี่ยวชาญ','ผู้เชี่ยวชาญ'];
+const LV_COLORS = ['','#93c5fd','#c4b5fd','#fcd34d','#fb923c','#4ade80'];
+const LV_BG = ['','#dbeafe','#ede9fe','#fef3c7','#fed7aa','#bbf7d0'];
 
-let DB = {}, myChart = null, selectedIdx = null, dropdownActive = -1;
+let DB = {}, myChart = null, safetyChart = null, selectedIdx = null, dropdownActive = -1;
+let currentGroup = null, groupAttChart = null, groupSafetyChart = null;
 
-function csvUrl(gid) {
-  return `${PUB_BASE}?gid=${gid}&single=true&output=csv`;
-}
+function csvUrl(gid) { return `${PUB_BASE}?gid=${gid}&single=true&output=csv`; }
 
 function parseCSV(text) {
   return text.trim().split('\n').map(line => {
@@ -351,48 +497,307 @@ async function loadData() {
 
     setStatus(`✅ โหลดสำเร็จ — พบพนักงาน ${employees.length} คน`, 'success');
     document.getElementById('last-updated').textContent = `อัพเดท ${new Date().toLocaleTimeString('th-TH')}`;
-
-    // Reset search
     clearSearch();
     selectedIdx = null;
     document.getElementById('emp-search').placeholder = `พิมพ์ชื่อหรือรหัสพนักงาน... (${employees.length} คน)`;
+
+    // Build group buttons
+    buildGroupButtons();
   } catch (e) {
     setStatus(`❌ โหลดไม่สำเร็จ: ${e.message}`, 'error');
   }
 }
 
-/* ── SEARCHABLE DROPDOWN LOGIC ── */
+/* ── TAB SWITCHING ── */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('content-' + tab).classList.add('active');
+}
 
+/* ── GROUP OVERVIEW LOGIC ── */
+
+function getGroups() {
+  if (!DB.employees) return [];
+  const groups = [...new Set(DB.employees.map(r => String(r[5] || '').trim()).filter(g => g))];
+  return groups.sort();
+}
+
+function buildGroupButtons() {
+  const groups = getGroups();
+  const container = document.getElementById('group-btn-list');
+  if (!groups.length) {
+    container.innerHTML = '<span style="color:var(--muted);font-size:13px;">ไม่พบข้อมูล Group (column F)</span>';
+    return;
+  }
+  container.innerHTML = groups.map(g =>
+    `<button class="group-btn" onclick="selectGroup('${escAttr(g)}')">${escHtml(g)}</button>`
+  ).join('');
+  // auto-select first
+  selectGroup(groups[0]);
+}
+
+function selectGroup(groupName) {
+  currentGroup = groupName;
+  // update button states
+  document.querySelectorAll('.group-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === groupName);
+  });
+  renderGroup(groupName);
+}
+
+function renderGroup(groupName) {
+  if (!DB.employees) return;
+
+  // Get employees in this group (column F = index 5)
+  const members = DB.employees.filter(r => String(r[5] || '').trim() === groupName);
+  const memberIds = members.map(r => String(r[0]));
+
+  // Attendance for these members
+  const attRows = DB.attendance.filter(r => memberIds.includes(String(r[0])));
+  const safetyRows = (DB.safety || []).filter(r => memberIds.includes(String(r[0])));
+  const trainRows = DB.trainings.filter(r => memberIds.includes(String(r[0])));
+  const compRows = DB.competencies.filter(r => memberIds.includes(String(r[0])));
+
+  // KPIs
+  const totalWork = attRows.reduce((s, r) => s + (+(r[2]) || 0), 0);
+  const totalAbsent = attRows.reduce((s, r) => s + (+(r[4]) || 0), 0);
+  const totalSick = attRows.reduce((s, r) => s + (+(r[5]) || 0), 0);
+  const totalInjury = safetyRows.reduce((s, r) => s + (+(r[5]) || 0), 0);
+  const totalAcc = safetyRows.reduce((s, r) => s + (+(r[6]) || 0), 0);
+  const totalSafetyTalk = safetyRows.reduce((s, r) => s + (+(r[2]) || 0), 0);
+  const avgWork = members.length ? (totalWork / members.length).toFixed(1) : 0;
+
+  // KPI cards
+  const kpiRow = document.getElementById('group-kpi-row');
+  kpiRow.style.display = 'grid';
+  kpiRow.innerHTML = `
+    <div class="kpi-card accent-card"><div class="kpi-icon">👥</div><div class="kpi-val">${members.length}</div><div class="kpi-label">จำนวนพนักงาน</div></div>
+    <div class="kpi-card"><div class="kpi-icon">📅</div><div class="kpi-val">${totalWork}</div><div class="kpi-label">วันทำงานรวม</div></div>
+    <div class="kpi-card"><div class="kpi-icon">📊</div><div class="kpi-val">${avgWork}</div><div class="kpi-label">วันเฉลี่ย/คน</div></div>
+    <div class="kpi-card red-card"><div class="kpi-icon">🚫</div><div class="kpi-val">${totalAbsent}</div><div class="kpi-label">ขาดงานรวม</div></div>
+    <div class="kpi-card"><div class="kpi-icon">🤒</div><div class="kpi-val">${totalSick}</div><div class="kpi-label">ลาป่วยรวม</div></div>
+    <div class="kpi-card ${totalInjury > 0 ? 'red-card' : 'green-card'}"><div class="kpi-icon">🩹</div><div class="kpi-val">${totalInjury}</div><div class="kpi-label">บาดเจ็บรวม</div></div>
+    <div class="kpi-card ${totalAcc > 0 ? 'red-card' : 'green-card'}"><div class="kpi-icon">⚠️</div><div class="kpi-val">${totalAcc}</div><div class="kpi-label">อุบัติเหตุรวม</div></div>
+    <div class="kpi-card"><div class="kpi-icon">🗣️</div><div class="kpi-val">${totalSafetyTalk}</div><div class="kpi-label">Safety Talk รวม</div></div>
+  `;
+
+  // Employee table
+  document.getElementById('group-emp-title').textContent = `กลุ่ม: ${groupName} (${members.length} คน)`;
+  const tbody = document.getElementById('group-emp-body');
+  if (!members.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--muted)">ไม่มีพนักงานในกลุ่มนี้</td></tr>';
+  } else {
+    tbody.innerHTML = members.map(r => {
+      const id = String(r[0]);
+      const empAtt = DB.attendance.filter(a => String(a[0]) === id);
+      const empSafety = (DB.safety || []).filter(s => String(s[0]) === id);
+      const wDays = empAtt.reduce((s, a) => s + (+(a[2]) || 0), 0);
+      const absent = empAtt.reduce((s, a) => s + (+(a[4]) || 0), 0);
+      const sick = empAtt.reduce((s, a) => s + (+(a[5]) || 0), 0);
+      const sTalk = empSafety.reduce((s, a) => s + (+(a[2]) || 0), 0);
+      const inj = empSafety.reduce((s, a) => s + (+(a[5]) || 0), 0);
+      const acc = empSafety.reduce((s, a) => s + (+(a[6]) || 0), 0);
+      const absentPill = absent === 0 ? `<span class="pill pill-green">0</span>` : `<span class="pill pill-red">${absent}</span>`;
+      const injPill = inj === 0 ? `<span class="pill pill-green">0</span>` : `<span class="pill pill-red">${inj}</span>`;
+      const accPill = acc === 0 ? `<span class="pill pill-green">0</span>` : `<span class="pill pill-red">${acc}</span>`;
+      return `<tr onclick="goToEmp('${id}')" title="คลิกเพื่อดูข้อมูลพนักงาน">
+        <td><span style="font-family:monospace;font-size:12px;color:var(--accent2)">${escHtml(id)}</span></td>
+        <td><strong>${escHtml(r[1] || '')}</strong></td>
+        <td style="color:var(--text-secondary)">${escHtml(r[2] || '')}</td>
+        <td class="center">${escHtml(r[4] || '—')}</td>
+        <td class="center">${wDays}</td>
+        <td class="center">${absentPill}</td>
+        <td class="center">${sick}</td>
+        <td class="center">${sTalk}</td>
+        <td class="center">${injPill}</td>
+        <td class="center">${accPill}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Attendance chart — per member total
+  if (groupAttChart) groupAttChart.destroy();
+  const attNames = members.map(r => r[1] || r[0]);
+  const attWork = members.map(r => {
+    const id = String(r[0]);
+    return DB.attendance.filter(a => String(a[0]) === id).reduce((s, a) => s + (+(a[2]) || 0), 0);
+  });
+  const attAbsent = members.map(r => {
+    const id = String(r[0]);
+    return DB.attendance.filter(a => String(a[0]) === id).reduce((s, a) => s + (+(a[4]) || 0), 0);
+  });
+  const attSick = members.map(r => {
+    const id = String(r[0]);
+    return DB.attendance.filter(a => String(a[0]) === id).reduce((s, a) => s + (+(a[5]) || 0), 0);
+  });
+
+  groupAttChart = new Chart(document.getElementById('group-att-chart'), {
+    type: 'bar',
+    data: {
+      labels: attNames,
+      datasets: [
+        { label:'วันทำงาน', data:attWork,   backgroundColor:'#1a2744', borderRadius:4 },
+        { label:'ขาดงาน',   data:attAbsent, backgroundColor:'#dc2626', borderRadius:4 },
+        { label:'ลาป่วย',   data:attSick,   backgroundColor:'#f59e0b', borderRadius:4 },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ font:{ family:'Sarabun', size:11 } } } },
+      scales:{
+        y:{ beginAtZero:true, ticks:{ font:{ family:'Sarabun' } } },
+        x:{ grid:{ display:false }, ticks:{ font:{ family:'Sarabun', size:10 }, maxRotation:30 } }
+      }
+    }
+  });
+
+  // Safety chart — per member total
+  if (groupSafetyChart) groupSafetyChart.destroy();
+  const sfNames = members.map(r => r[1] || r[0]);
+  const sfTalk = members.map(r => {
+    const id = String(r[0]);
+    return (DB.safety||[]).filter(s => String(s[0])===id).reduce((sum,s)=>sum+(+(s[2])||0),0);
+  });
+  const sfBbso = members.map(r => {
+    const id = String(r[0]);
+    return (DB.safety||[]).filter(s => String(s[0])===id).reduce((sum,s)=>sum+(+(s[4])||0),0);
+  });
+  const sfInj = members.map(r => {
+    const id = String(r[0]);
+    return (DB.safety||[]).filter(s => String(s[0])===id).reduce((sum,s)=>sum+(+(s[5])||0),0);
+  });
+  const sfAcc = members.map(r => {
+    const id = String(r[0]);
+    return (DB.safety||[]).filter(s => String(s[0])===id).reduce((sum,s)=>sum+(+(s[6])||0),0);
+  });
+
+  groupSafetyChart = new Chart(document.getElementById('group-safety-chart'), {
+    type: 'bar',
+    data: {
+      labels: sfNames,
+      datasets: [
+        { label:'Safety Talk', data:sfTalk, backgroundColor:'#3b82f6', borderRadius:4 },
+        { label:'BBSO',        data:sfBbso, backgroundColor:'#f59e0b', borderRadius:4 },
+        { label:'บาดเจ็บ',    data:sfInj,  backgroundColor:'#ef4444', borderRadius:4 },
+        { label:'อุบัติเหตุ', data:sfAcc,  backgroundColor:'#7f1d1d', borderRadius:4 },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ font:{ family:'Sarabun', size:11 } } } },
+      scales:{
+        y:{ beginAtZero:true, ticks:{ font:{ family:'Sarabun' } } },
+        x:{ grid:{ display:false }, ticks:{ font:{ family:'Sarabun', size:10 }, maxRotation:30 } }
+      }
+    }
+  });
+
+  // Competency heatmap
+  renderGroupComp(memberIds);
+
+  // Training summary
+  renderGroupTraining(memberIds, trainRows);
+}
+
+function renderGroupComp(memberIds) {
+  // For each skill, count how many people are at each level (1-5)
+  const heatmap = document.getElementById('skill-heatmap');
+  const compRows = DB.competencies.filter(r => memberIds.includes(String(r[0])));
+  const n = memberIds.length;
+
+  if (!compRows.length) {
+    heatmap.innerHTML = '<div class="empty-state">ไม่มีข้อมูลความสามารถ</div>';
+    return;
+  }
+
+  const allSkills = [...MECH, ...ELEC, ...OPS, ...MACH];
+  // column offset: col 1..8 = MECH, 9..14 = ELEC, 15..19 = OPS, 20..23 = MACH
+  let html = '';
+  let colIdx = 1;
+  allSkills.forEach(skillName => {
+    const counts = [0, 0, 0, 0, 0]; // lv1..lv5
+    compRows.forEach(r => {
+      const v = parseInt(r[colIdx], 10);
+      if (v >= 1 && v <= 5) counts[v - 1]++;
+    });
+    const total = counts.reduce((a, b) => a + b, 0);
+    const maxBarWidth = 300; // px total
+    const bars = counts.map((c, i) => {
+      if (c === 0) return '';
+      const w = Math.max(20, Math.round((c / n) * maxBarWidth));
+      return `<div class="skill-bar-seg" style="background:${LV_COLORS[i+1]};width:${w}px;" title="${LEVELS[i+1]}: ${c} คน">${c}</div>`;
+    }).join('');
+    html += `<div class="skill-row">
+      <div class="skill-name" title="${skillName}">${escHtml(skillName)}</div>
+      <div class="skill-bars">${bars || '<span style="color:#ddd;font-size:11px;">ยังไม่ประเมิน</span>'}</div>
+      <div class="skill-count">${total}/${n}</div>
+    </div>`;
+    colIdx++;
+  });
+  heatmap.innerHTML = html;
+}
+
+function renderGroupTraining(memberIds, trainRows) {
+  const container = document.getElementById('group-train-summary');
+  if (!trainRows.length) {
+    container.innerHTML = '<div class="empty-state">ไม่มีข้อมูลการอบรม</div>';
+    return;
+  }
+  // Group by course name
+  const byName = {};
+  trainRows.forEach(r => {
+    const name = r[1] || 'ไม่ระบุ';
+    if (!byName[name]) byName[name] = { pass: 0, fail: 0, total: 0 };
+    byName[name].total++;
+    if (r[4] === 'ผ่าน') byName[name].pass++;
+    else byName[name].fail++;
+  });
+  container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;">` +
+    Object.entries(byName).map(([name, stat]) => `
+      <div style="background:var(--surface);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+        <div style="font-weight:600;font-size:13px;margin-bottom:6px;">${escHtml(name)}</div>
+        <div style="display:flex;gap:10px;font-size:12px;">
+          <span class="pill pill-green">ผ่าน ${stat.pass}</span>
+          ${stat.fail > 0 ? `<span class="pill pill-red">ไม่ผ่าน ${stat.fail}</span>` : ''}
+          <span style="color:var(--muted)">รวม ${stat.total}</span>
+        </div>
+      </div>`).join('') +
+  `</div>`;
+}
+
+function goToEmp(id) {
+  if (!DB.employees) return;
+  const idx = DB.employees.findIndex(r => String(r[0]) === id);
+  if (idx === -1) return;
+  switchTab('emp');
+  selectEmployee(idx);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── SEARCHABLE DROPDOWN LOGIC ── */
 function highlight(text, query) {
   if (!query) return escHtml(text);
   const idx = text.toLowerCase().indexOf(query.toLowerCase());
   if (idx === -1) return escHtml(text);
-  return escHtml(text.slice(0, idx)) +
-    '<mark>' + escHtml(text.slice(idx, idx + query.length)) + '</mark>' +
-    escHtml(text.slice(idx + query.length));
+  return escHtml(text.slice(0, idx)) + '<mark>' + escHtml(text.slice(idx, idx + query.length)) + '</mark>' + escHtml(text.slice(idx + query.length));
 }
-
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s) { return String(s).replace(/'/g,'&#39;').replace(/"/g,'&quot;'); }
 
 function getFilteredList(query) {
   if (!DB.employees) return [];
   if (!query) return DB.employees.map((r, i) => ({ idx: i, r }));
   const q = query.toLowerCase();
-  return DB.employees
-    .map((r, i) => ({ idx: i, r }))
-    .filter(({ r }) =>
-      String(r[0]).toLowerCase().includes(q) ||
-      String(r[1] || '').toLowerCase().includes(q)
-    );
+  return DB.employees.map((r, i) => ({ idx: i, r }))
+    .filter(({ r }) => String(r[0]).toLowerCase().includes(q) || String(r[1] || '').toLowerCase().includes(q));
 }
 
 function renderDropdown(query) {
   const list = document.getElementById('dropdown-list');
   const items = getFilteredList(query);
   dropdownActive = -1;
-
   if (!items.length) {
     list.innerHTML = '<div class="dropdown-empty">ไม่พบพนักงานที่ค้นหา</div>';
   } else {
@@ -400,8 +805,7 @@ function renderDropdown(query) {
       <div class="dropdown-item" data-idx="${idx}" onmousedown="selectEmployee(${idx})">
         <span class="emp-code">${highlight(String(r[0]), query)}</span>
         <span class="emp-name">${highlight(String(r[1] || ''), query)}</span>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
   list.classList.add('open');
 }
@@ -410,17 +814,12 @@ function openDropdown() {
   if (!DB.employees || !DB.employees.length) return;
   renderDropdown(document.getElementById('emp-search').value.trim());
 }
-
-function closeDropdown() {
-  document.getElementById('dropdown-list').classList.remove('open');
-}
-
+function closeDropdown() { document.getElementById('dropdown-list').classList.remove('open'); }
 function onSearchInput() {
   const val = document.getElementById('emp-search').value;
   document.getElementById('search-clear').classList.toggle('visible', val.length > 0);
   renderDropdown(val.trim());
 }
-
 function clearSearch() {
   document.getElementById('emp-search').value = '';
   document.getElementById('search-clear').classList.remove('visible');
@@ -440,42 +839,23 @@ function selectEmployee(idx) {
   renderEmployee(idx);
 }
 
-/* Keyboard navigation */
 document.addEventListener('keydown', function(e) {
   const list = document.getElementById('dropdown-list');
   if (!list.classList.contains('open')) return;
   const items = list.querySelectorAll('.dropdown-item');
   if (!items.length) return;
-
-  if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    dropdownActive = Math.min(dropdownActive + 1, items.length - 1);
-    items.forEach((el, i) => el.classList.toggle('active', i === dropdownActive));
-    items[dropdownActive]?.scrollIntoView({ block: 'nearest' });
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    dropdownActive = Math.max(dropdownActive - 1, 0);
-    items.forEach((el, i) => el.classList.toggle('active', i === dropdownActive));
-    items[dropdownActive]?.scrollIntoView({ block: 'nearest' });
-  } else if (e.key === 'Enter') {
-    if (dropdownActive >= 0 && items[dropdownActive]) {
-      const idx = +items[dropdownActive].dataset.idx;
-      selectEmployee(idx);
-    }
-  } else if (e.key === 'Escape') {
-    closeDropdown();
-    document.getElementById('emp-search').blur();
-  }
+  if (e.key === 'ArrowDown') { e.preventDefault(); dropdownActive = Math.min(dropdownActive+1, items.length-1); items.forEach((el,i)=>el.classList.toggle('active',i===dropdownActive)); items[dropdownActive]?.scrollIntoView({block:'nearest'}); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); dropdownActive = Math.max(dropdownActive-1, 0); items.forEach((el,i)=>el.classList.toggle('active',i===dropdownActive)); items[dropdownActive]?.scrollIntoView({block:'nearest'}); }
+  else if (e.key === 'Enter') { if (dropdownActive>=0&&items[dropdownActive]) selectEmployee(+items[dropdownActive].dataset.idx); }
+  else if (e.key === 'Escape') { closeDropdown(); document.getElementById('emp-search').blur(); }
 });
 
-/* Close dropdown when clicking outside */
 document.addEventListener('mousedown', function(e) {
   const wrap = document.getElementById('search-wrap');
   if (!wrap.contains(e.target)) closeDropdown();
 });
 
 /* ── RENDER EMPLOYEE DATA ── */
-
 function renderEmployee(idx) {
   const r = DB.employees[idx];
   if (!r) return;
@@ -485,6 +865,7 @@ function renderEmployee(idx) {
   document.getElementById('f-position').textContent = r[2] || '—';
   document.getElementById('f-age').textContent      = r[3] || '—';
   document.getElementById('f-tenure').textContent   = r[4] || '—';
+  document.getElementById('f-group').textContent    = r[5] || '—';
   document.getElementById('emp-id-badge').textContent = id || '—';
   doAttendance(id); doSafety(id); doAchievements(id); doTrainings(id); doComp(id);
 }
@@ -515,62 +896,35 @@ function doAttendance(id) {
       { label:'ขาดงาน',   data:absent, backgroundColor:'#dc2626', borderRadius:4 },
       { label:'ลาป่วย',   data:sick,   backgroundColor:'#f59e0b', borderRadius:4 },
     ]},
-    options: { responsive:true, maintainAspectRatio:false,
-      plugins: {
-        legend: { position:'top', labels:{ font:{family:'Sarabun',size:12} } },
-        title:  { display:true, text:'กราฟสรุปการเข้าทำงานรายเดือน', font:{family:'Sarabun',size:14,weight:'600'}, color:'#1a2744' }
-      },
-      scales: { y:{ beginAtZero:true, ticks:{font:{family:'Sarabun'}} }, x:{ grid:{display:false}, ticks:{font:{family:'Sarabun',size:11}} } }
-    }
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{family:'Sarabun',size:12}}},title:{display:true,text:'กราฟสรุปการเข้าทำงานรายเดือน',font:{family:'Sarabun',size:14,weight:'600'},color:'#1a2744'}},scales:{y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}},x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}}}}
   });
 }
 
-let safetyChart = null;
 function doSafety(id) {
   const rows = (DB.safety||[]).filter(r => String(r[0]) === id);
   const tbody = document.getElementById('safety-body');
-
   if (!rows.length) {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">ไม่มีข้อมูลความปลอดภัย</td></tr>';
     if (safetyChart) { safetyChart.destroy(); safetyChart = null; }
     return;
   }
-
-  const months=[], st=[], sgt=[], bbso=[], inj=[], acc=[];
+  const months=[],st=[],sgt=[],bbso=[],inj=[],acc=[];
   tbody.innerHTML = rows.map(r => {
-    const month = r[1]||'';
-    const v2 = +(r[2])||0, v3 = +(r[3])||0, v4 = +(r[4])||0;
-    const v5 = +(r[5])||0, v6 = +(r[6])||0;
-    months.push(month); st.push(v2); sgt.push(v3); bbso.push(v4); inj.push(v5); acc.push(v6);
-    const injCls = v5===0?'s-ok':'s-danger';
-    const accCls = v6===0?'s-ok':'s-danger';
-    return `<tr>
-      <td>${month}</td>
-      <td>${v2}</td>
-      <td>${v3}</td>
-      <td>${v4}</td>
-      <td class="${injCls}">${v5}</td>
-      <td class="${accCls}">${v6}</td>
-    </tr>`;
+    const month=r[1]||'',v2=+(r[2])||0,v3=+(r[3])||0,v4=+(r[4])||0,v5=+(r[5])||0,v6=+(r[6])||0;
+    months.push(month);st.push(v2);sgt.push(v3);bbso.push(v4);inj.push(v5);acc.push(v6);
+    return `<tr><td>${month}</td><td>${v2}</td><td>${v3}</td><td>${v4}</td><td class="${v5===0?'s-ok':'s-danger'}">${v5}</td><td class="${v6===0?'s-ok':'s-danger'}">${v6}</td></tr>`;
   }).join('');
-
   if (safetyChart) safetyChart.destroy();
   safetyChart = new Chart(document.getElementById('safety-chart'), {
-    type: 'bar',
-    data: { labels: months, datasets: [
-      { label:'Safety Talk',    data:st,   backgroundColor:'#3b82f6', borderRadius:4 },
-      { label:'Small Group',    data:sgt,  backgroundColor:'#8b5cf6', borderRadius:4 },
-      { label:'BBSO',           data:bbso, backgroundColor:'#f59e0b', borderRadius:4 },
-      { label:'บาดเจ็บ',        data:inj,  backgroundColor:'#ef4444', borderRadius:4 },
-      { label:'อุบัติเหตุ',     data:acc,  backgroundColor:'#dc2626', borderRadius:4 },
+    type:'bar',
+    data:{labels:months,datasets:[
+      {label:'Safety Talk',data:st,backgroundColor:'#3b82f6',borderRadius:4},
+      {label:'Small Group',data:sgt,backgroundColor:'#8b5cf6',borderRadius:4},
+      {label:'BBSO',data:bbso,backgroundColor:'#f59e0b',borderRadius:4},
+      {label:'บาดเจ็บ',data:inj,backgroundColor:'#ef4444',borderRadius:4},
+      {label:'อุบัติเหตุ',data:acc,backgroundColor:'#dc2626',borderRadius:4},
     ]},
-    options: { responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{ position:'top', labels:{font:{family:'Sarabun',size:12}} },
-        title:{ display:true, text:'กราฟสรุปความปลอดภัยรายเดือน', font:{family:'Sarabun',size:14,weight:'600'}, color:'#1a2744' }
-      },
-      scales:{ y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}}, x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}} }
-    }
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{family:'Sarabun',size:12}}},title:{display:true,text:'กราฟสรุปความปลอดภัยรายเดือน',font:{family:'Sarabun',size:14,weight:'600'},color:'#1a2744'}},scales:{y:{beginAtZero:true,ticks:{font:{family:'Sarabun'}}},x:{grid:{display:false},ticks:{font:{family:'Sarabun',size:11}}}}}
   });
 }
 
@@ -579,22 +933,17 @@ function doAchievements(id) {
   const hi = rows.filter(r => String(r[2]).includes('สำคัญ'));
   const is = rows.filter(r => String(r[2]).includes('ปัญหา'));
   document.getElementById('hi-list').innerHTML = hi.length
-    ? hi.map(r => `<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
+    ? hi.map(r=>`<div class="list-item"><div class="dot green"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
     : '<div class="empty-state">ไม่มีข้อมูล</div>';
   document.getElementById('is-list').innerHTML = is.length
-    ? is.map(r => `<div class="list-item"><div class="dot red"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
+    ? is.map(r=>`<div class="list-item"><div class="dot red"></div><div>${r[1]||''} <span style="color:#aaa;font-size:11px">${r[3]||''}</span></div></div>`).join('')
     : '<div class="empty-state">ไม่มีข้อมูล</div>';
 }
 
 function doTrainings(id) {
   const rows = DB.trainings.filter(r => String(r[0]) === id);
   document.getElementById('train-list').innerHTML = rows.length
-    ? rows.map(r => `<div class="training-item">
-        <div class="t-date">📅 ${r[2]||''}</div>
-        <div style="font-weight:500;flex:1">${r[1]||''}</div>
-        <div style="color:var(--muted);font-size:12px">${r[3]||''}</div>
-        <div class="${r[4]==='ผ่าน'?'t-pass':'t-fail'}">${r[4]||''}</div>
-      </div>`).join('')
+    ? rows.map(r=>`<div class="training-item"><div class="t-date">📅 ${r[2]||''}</div><div style="font-weight:500;flex:1">${r[1]||''}</div><div style="color:var(--muted);font-size:12px">${r[3]||''}</div><div class="${r[4]==='ผ่าน'?'t-pass':'t-fail'}">${r[4]||''}</div></div>`).join('')
     : '<div class="empty-state">ยังไม่มีประวัติการอบรม</div>';
 }
 
@@ -610,15 +959,11 @@ function doComp(id) {
 function renderStars(gridId, skills, scores) {
   document.getElementById(gridId).innerHTML = skills.map((name, i) => {
     const raw = scores[i];
-    const v = (raw === '' || raw === null || raw === undefined) ? 0 : parseInt(raw, 10) || 0;
-    const assessed = v >= 1 && v <= 5;
+    const v = (raw===''||raw===null||raw===undefined) ? 0 : parseInt(raw,10) || 0;
+    const assessed = v>=1 && v<=5;
     const cls = assessed ? `comp-item lv${v}` : 'comp-item';
-    const stars = [1,2,3,4,5].map(n => `<span class="star ${n<=v?'on':''}">\u2605</span>`).join('');
-    return `<div class="${cls}">
-      <div class="comp-name">${name}</div>
-      <div class="comp-stars">${stars}</div>
-      <div class="comp-level">${assessed ? LEVELS[v] : 'ยังไม่ประเมิน'}</div>
-    </div>`;
+    const stars = [1,2,3,4,5].map(n=>`<span class="star ${n<=v?'on':''}">★</span>`).join('');
+    return `<div class="${cls}"><div class="comp-name">${name}</div><div class="comp-stars">${stars}</div><div class="comp-level">${assessed?LEVELS[v]:'ยังไม่ประเมิน'}</div></div>`;
   }).join('');
 }
 
@@ -628,9 +973,9 @@ function setStatus(msg, type) {
 }
 
 // Init
-renderStars('mech-grid',    MECH, []);
-renderStars('elec-grid',    ELEC, []);
-renderStars('ops-grid',     OPS,  []);
+renderStars('mech-grid', MECH, []);
+renderStars('elec-grid', ELEC, []);
+renderStars('ops-grid',  OPS,  []);
 renderStars('machine-grid', MACH, []);
 </script>
 </body>
